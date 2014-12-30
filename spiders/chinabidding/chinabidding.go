@@ -9,6 +9,15 @@ import (
 	"strings"
 )
 
+const (
+	ROOT_URL          = "http://www.chinabidding.com.cn"
+	START_URL_DAILY   = "http://www.chinabidding.com.cn/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=day"
+	START_URL_MONTHLY = "http://www.chinabidding.com.cn/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=month"
+	START_URL_YEARLY  = "http://www.chinabidding.com.cn/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=year"
+	LOGIN_PAGE_URL    = "http://www.chinabidding.com.cn/cblcn/member.login/login"
+	LOGIN_CHECK_URL   = "http://www.chinabidding.com.cn/cblcn/member.login/logincheck"
+)
+
 type Item struct {
 	Title     string
 	Category  string
@@ -31,7 +40,7 @@ func Login(name string, pass string, cookies []*http.Cookie) []*http.Cookie {
 	client := &http.Client{}
 	req, err := http.NewRequest(
 		"POST",
-		"http://www.chinabidding.com.cn/cblcn/member.login/logincheck",
+		LOGIN_CHECK_URL,
 		strings.NewReader(fmt.Sprintf("name=%s&password=%s", name, pass)))
 	if err != nil {
 		log.Fatal(err)
