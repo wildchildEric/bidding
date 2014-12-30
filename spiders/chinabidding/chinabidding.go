@@ -154,7 +154,7 @@ func Start() {
 	cookies := GetCookies(LOGIN_PAGE_URL)
 	// cookies = Login("nmzb", "NMzb2014", cookies)
 	// body := getPage("http://www.chinabidding.com.cn/zbgs/jMGQ.html", cookies)
-	all_items := make([]*Item, 0)
+	all_items := []*Item{}
 	list_html_str := GetPage(START_URL_MONTHLY, cookies)
 	url_list := ParseListPageToLinks(list_html_str)
 	for i, u := range url_list {
