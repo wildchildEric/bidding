@@ -1,0 +1,833 @@
+<html>
+    <head>
+
+
+        <title>中国采购与招标网-搜索</title>
+        <META http-equiv="X-UA-Compatible" content="IE=8" > </META>
+        <!--<title>中国采购与招标网高级搜索引擎</title>-->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <script type="text/javascript" src="http://www.chinabidding.com.cn/js/common.js"></script>
+        <script type="text/javascript" src="http://www.chinabidding.com.cn/zbw/js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="http://www.chinabidding.com.cn/zbw/js/jquery.flash.js"></script>
+        <script type="text/javascript" src="http://www.chinabidding.com.cn/cblcn/YeMianGuangGao/all_search"></script>
+        <script type="text/javascript" src="http://www.chinabidding.com.cn/zbw/js/jquery.floatDiv.js"></script>
+
+        <!--
+        <script src="/public/javascripts/common/jquery.floatDiv.js"></script>
+        <script src="/public/search/zbw/js/common.js"></script>
+        <script src="http://www.chinabidding.com.cn/js/common.js"></script>
+        -->
+
+
+      <link type="text/css" rel="stylesheet" href="/public/search/zbw/css/main.css">
+        <!--<link type="text/css" rel="stylesheet" href="http://www.chinabidding.com.cn/zbw/css/main.css">-->
+        <link type="text/css" rel="stylesheet" href="/public/search/zbw/css/css.css">
+        <!--<link type="text/css" rel="stylesheet" href="http://www.chinabidding.com.cn/zbw/css.css">-->
+        <link type="images/x-icon" href="/public/search/zbw/images/favicon.ico" rel="shortcut icon">
+        <!--<link type="images/x-icon" href="http://www.chinabidding.com.cn/zbw/images/favicon.ico" rel="shortcut icon">-->
+
+        <script>
+            function cpdq(id){
+                window.open("/zbw/provider/cpdq/index_cpxs.jsp?record_id="+id );
+            }
+
+            function provider_show(obj){
+                var url = "/zbw/provider/gysdq/provider_show.jsp?record_id="+obj;
+                window.open(url);
+            }
+        </script>
+        <script>
+            //高级搜索提交
+            function btn_submit_search(){
+                document.adv_search.op.value='op_search';
+                document.adv_search.submit();
+            }
+        </script>
+
+        <style type="text/css">
+            td.company_comment{line-height: 18px;}
+            &lt;!--
+            .m {	CURSOR: hand; COLOR: #000000; TEXT-DECORATION: none
+            }
+            .s {	TEXT-DECORATION: none
+            }
+            .t {	FONT-WEIGHT: normal; COLOR: #0000cc; TEXT-DECORATION: none
+            }
+            .font14{
+                font-size: 14px;
+                color:#CF4308;
+                font-weight: bold;
+            }
+
+            --&gt;
+        </style>
+        <script type="text/JavaScript" language="JavaScript">
+                &lt;!--
+            function MM_jumpMenu(targ,selObj,restore){ //v3.0
+                eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+                if (restore) selObj.selectedIndex=0;
+            }
+            //--&gt;
+        </script>
+    </head>
+    <body>
+        <table width="1003" cellspacing="0" cellpadding="0" border="0" align="center">
+  <tbody><tr>
+    <td height="100"><img width="288" height="91" border="0" usemap="#Map" src="http://www.chinabidding.com.cn/zbw/images/anewind_26.jpg"></td>
+    <!--<td ><a href="http://211.94.190.80/html.ng/params.styles=clickcmd&adspec=Flash&adtype=pip&affiliate=chinabidding&campaignid=2808&channel=F1&log=0?"><img src="../images/中国采购与招标网_首页_左侧BANNER_230x92_NA_jpg.jpg" width="230" height="92" border="0" ></a></td>-->
+    <td align="right">
+    <!-- 搜索页logo右边的广告位 600*90 -->
+    <div id="search_logo_right"></div>
+    <!--<object width="600" height="90" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+      <param value="http://www.chinabidding.com.cn/zbw/images/BANENR_600x90_0107.swf" name="movie">
+      <param value="high" name="quality">
+      <embed width="600" height="90" type="application/x-shockwave-flash" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" quality="high" src="http://www.chinabidding.com.cn/zbw/images/BANENR_600x90_0107.swf">
+    </object>-->
+    </td>
+  </tr>
+</tbody></table>
+
+
+
+
+<table cellspacing="0" cellpadding="0" border="0" align="center" width="1003">
+    <tbody>
+        <tr>
+            <td height="29" background="http://www.chinabidding.com.cn/zbw/images/searchnew_07.jpg">
+                <a href="/">首页</a> &gt; 搜索结果</td>
+        </tr>
+    </tbody>
+</table>
+<table cellspacing="0" cellpadding="0" border="0" align="center" width="1003">
+    <tbody>
+        <tr>
+            <td height="5">
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table cellspacing="0" cellpadding="0" border="0" align="center" width="1003">
+    <tbody>
+        <tr>
+            <!-- 第一列，列表和分页 -->
+            <td width="806" valign="top">
+                <table cellspacing="0" cellpadding="0" border="0" width="99%"><tbody><tr><td>
+                    <script language="JavaScript">//点击事件
+                         function LTClick(obj) {if(window.choice_click) return choice_click(obj.value, obj);}
+                    </script>
+                    <table height="20" frame="box" cellspacing="1" cellpadding="3" border="0" align="center"
+       width="100%" class="table_body" bordercolorlight="BLACK" bordercolordark="WHITE">
+    <col span="1" align="LEFT">
+    <col span="1" align="LEFT">
+    <col span="1" align="LEFT">
+    <col span="1" align="LEFT">
+    <tbody>
+<tr class="table_title">
+<td width="30"><center></center></td>
+<td width="200"><center>主题</center></td>
+<td width="80"><center>信息类别</center></td>
+<td width="50"><center>地区</center></td>
+<td width="100"><center>行业</center></td>
+<td width="80"><center>发布时间</center></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/Fnhw.html">蒙东能源公司2015年第五批集中招标(劳保用品)招标公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>能源</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 10:09:06</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FnfQ.html">翁牛特旗海拉苏镇抗旱应急配套工程设计招标公告</a></td>
+    <td>工程招标</td>
+    <td>内蒙古</td>
+    <td>水利桥梁</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 10:04:18</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FnAx.html">中电投蒙东能源集团有限责任公司二○一五年第三批集中招标（铝电）招标公告</a></td>
+    <td>工程招标</td>
+    <td>内蒙古</td>
+    <td>能源</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 10:00:26</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/FnJD.html">内蒙古自治区示范性养老公寓建设项目制供氧系统及中心吸引系统设备采购中标（成交）结果公示</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>医疗卫生,其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 10:00:21</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/Fniw.html">巴彦淖尔河套农村商业银行金川支行室内装饰装修工程监理中标公示</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>市政房地产建筑</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:57:47</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FnVZ.html">翁牛特旗阿什罕高日苏庙抗旱应急新建水库工程设计招标公告</a></td>
+    <td>工程招标</td>
+    <td>内蒙古</td>
+    <td>水利桥梁</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:57:10</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/FnHP.html">内蒙古霍林河循环经济示范工程2×35万千瓦“上大压小”自备电厂扩建项目第九批辅机设备招标结果公示</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>能源</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:48:53</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FnH0.html">北方联合电力有限责任公司和林发电厂2×660MW超临界间接空冷燃煤机组第九批辅机6kV中压开关柜、6KV变频器采购资格预审公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>能源,其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:48:31</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/Fn3J.html">内蒙古自治区烟草公司巴彦淖尔市公司厢式货车采购招标公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>机械电子电器</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:44:49</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FnQs.html">巴林右旗抗旱应急水源工程设计招标公告</a></td>
+    <td>服务招标</td>
+    <td>内蒙古</td>
+    <td>水利桥梁</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:29:59</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FCge.html">北方联合电力有限责任公司和林发电厂2×660MW超临界间接空冷燃煤机组第八批辅机设备采购招标公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>能源,其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:28:40</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/FCgn.html">乌拉特后旗和谐小区、安泰小区、裕民小区新建廉租住房配套设施施工中标公示</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>市政房地产建筑</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:27:26</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FCXG.html">乌兰察布电业局2014年第二十五批设备材料采购招标公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>能源</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:13:43</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FCXn.html">呼和浩特开发区报社电视设备采购项目变更招标变更公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>机械电子电器,其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 09:03:54</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FCLn.html">北方联合电力有限责任公司包头第三热电厂煤场封闭、烟囱防腐工程监理项目招标公告</a></td>
+    <td>服务招标</td>
+    <td>内蒙古</td>
+    <td>其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 08:55:23</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FCEq.html">包钢冶金渣公司工艺设备及材料采购竞争性谈判公告</a></td>
+    <td>货物招标</td>
+    <td>内蒙古</td>
+    <td>冶金矿产原材料</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 08:50:17</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgg/FCE1.html">赤峰市喀喇沁旗锦山镇城区给排水改扩建【锦山城区水源地建设】工程（20000m3/d城镇生活供水）水资源论证招标公告</a></td>
+    <td>服务招标</td>
+    <td>内蒙古</td>
+    <td>其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 08:47:54</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/FCFr.html">呼和浩特市友信商业管理有限公司管理系统设备采购中标结果公告</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>其它</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 08:34:10</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/FnHS.html">巴彦淖尔河套农村商业银行金川支行室内装饰装修工程施工中标公示</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>市政房地产建筑</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 24:00:00</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/CnR3D8.html">市计生中心、市精神卫生中心询价采购中标公告</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>市政房地产建筑</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 24:00:00</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"    class="listrow1"  >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zfcg/Cewe2C.html">红山区公路管理工区沥青洒布车询价采购公告</a></td>
+    <td>政府采购</td>
+    <td>内蒙古</td>
+    <td>交通运输</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 24:00:00</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+<tr  height="23"   class="listrow2"   >
+     <td>
+        <div align="center"><img height="9" width="10" src="http://www.chinabidding.com.cn/zbw/images/cio_pic.jpg" /></div>
+        <input type="hidden" value="VIPXM" name="table_name2">
+    </td>
+    <td><a target="_blank" href="/zbgs/CewehL.html">扎鲁特旗教育体育局小神童小精灵幼儿园设备中标公示</a></td>
+    <td>中标公示</td>
+    <td>内蒙古</td>
+    <td>机械电子电器</td>
+    <td>
+
+        2014-12-30
+        <div style="display: none">2014-12-30 24:00:00</div>
+    </td>
+</tr>
+<tr>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+    <td height="3" background="http://www.chinabidding.com.cn/zbw/images/cio.jpg" class="tit_bg" colspan="3"></td>
+</tr>
+
+</tbody>
+</table>
+                    <!-- 分页 -->
+<div id="pages" align="center" >
+
+    <a href="/search/searchzbw/search2?rp=22&categoryid=&keywords=&page=1&areaid=7&table_type=0&b_date=month" >第一页</a>
+
+
+
+
+
+
+
+
+
+
+
+            <a href="/search/searchzbw/search2?rp=22&categoryid=&keywords=&page=2&areaid=7&table_type=0&b_date=month" >2</a>
+
+
+
+            <a href="/search/searchzbw/search2?rp=22&categoryid=&keywords=&page=3&areaid=7&table_type=0&b_date=month" >3</a>
+
+
+
+            <a href="/search/searchzbw/search2?rp=22&categoryid=&keywords=&page=4&areaid=7&table_type=0&b_date=month" >4</a>
+
+
+
+        <a href="/search/searchzbw/search2?rp=22&categoryid=&keywords=&page=2&areaid=7&table_type=0&b_date=month" >后一页</a>
+
+    <a href="/search/searchzbw/search2?rp=22&categoryid=&keywords=&page=182&areaid=7&table_type=0&b_date=month" >最后一页</a>
+    共11627条记录,用时35.0ms
+
+        <font size=1>仅提供4000 条记录</font>
+
+</div>
+                </td></tr></tbody></table>
+            </td>
+            <!-- 第二列，右侧显示框，显示：推荐企业和推荐产品 -->
+            <td width="197" valign="top">
+                <!---->
+                <iframe  scrolling=no src='/public/static/search/searchzbw-right/index.html'
+                         width=197 height=750 border=0 marginWidth=0 marginHeight=0 frameBorder=no >
+                </iframe>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<script type="text/javascript" src="http://ad.chinabidding.com.cn/cblcn/YeMianGuangGao/search"></script>
+
+
+<!--登录之前开始-->
+<div id="mfhydl" >
+
+    <div style="width:700px;height:38px;margin:0 auto"> <div style="float:left;margin-right:7px"> 您还未登录，请  <a href="#" onclick="xsdl();" style="color:#fd751a;text-decoration: underline;font-size:16px">登录</a>  还没有账号？</div>
+        <div id="zcrk01" style="background: url(/public/images/ljzc_03.jpg);width:93px;height:29px;border:none;cursor: pointer;float:left;margin-top:5px;margin-right：5px" >
+
+        </div>
+          <div style="float:left;padding-left:10px;"> 免费注册后可以在全文搜索查看免费信息。</div></div>
+</div>
+
+<!--登录之前结束-->
+
+<!--登录之后开始-->
+<div id="mfhy" >
+
+   您目前是免费会员，您可以去全文搜索，查看免费信息！   <a href="/search/searchN/searchQ" target="_blank" style="color:#fd751a;text-decoration: underline;font-size:16px">进入全文搜索！</a>
+
+</div>
+<!--登录之后结束-->
+
+
+        <input type="hidden" id="login_dia" value="0"/>
+        <div id="hui" style="display:inline-block;position:absolute;top:0px;filter:alpha(opacity:60);opacity:0.4;background-color:#666;z-index:100;left:0px;"></div>
+         <!--弹出框-->
+            <html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+         <style type="text/css">
+ .yes_img{width:24px;height:24px;float:left;background:url(/public/info/new_regist/images/yes.jpg) no-repeat;}
+ .tanc_lanmu{width:465px;height:auto;border:5px solid #fd9f60;position:absolute;left:33%;top:200px;font-size:12px;background:#fff;z-index:99999;zoom:1;display:none;}
+.deng_biankuang{width:480px;height:318px;background:#05a0f9;position:absolute;left:200px;_left:400px;top:200px;filter:alpha(opacity=60);opacity: 0.6;}
+.denglu{width:465px;height:330px;background:#fff;}
+.d_biaoti{width:465px;height:50px;}
+.d_biao{width:395px;height:50px;line-height:50px;float:left;color:#ff5500;font-size:16px;font-weight:600;padding-left:25px;}
+.d_guanbi{float:right;padding-top:10px;padding-right:10px}
+.d_guanbi img{border:none}
+.d_nr{width:460px;height:145px;}
+.d_nr table tr th{font:100 14px/50px "Microsoft YaHei","SimSun";margin-bottom:15px;}
+.name{width:258px;height:41px;background:url(/public/cblcn/wdpd/images/kuang_07.jpg) no-repeat;border:none;margin-bottom:10px;padding-left:5px;;line-height:41px;font-size:14px;*line-height:35px;outline:none}
+.yanz{width:133px;height:36px;background:url(/public/cblcn/wdpd/images/yanzheng_10.jpg) no-repeat;border:none;margin-bottom:10px;padding-left:5px;;line-height:36px;font-size:14px;float:left;*line-height:35px;outline:none}
+.biao_ming{padding-left:55px;display:block;float:left;}
+.yz_tu{width:81px;height:30px;padding-top:5px;background:#006}
+.qian{float:left;width:250px;height:40px;}
+.yanz_tu{padding-top:5px}
+.kbq a{font-size:12px;color:#0078ff;vertical-align:-5px;_vertical-align:-3px;}
+.kbq a:hover{text-decoration:underline;}
+.no_img{width:17px;height:17px;float:left;padding-top:5px;padding-left:102px;padding-right:4px;}
+.no_font{height:28px;line-height:28px;padding-left:5px;color:#f00;font-size:12px;*line-height:32px;padding-left:3px;}
+.anniu{width:450px;height:50px;padding-left:15px;overflow: hidden}
+.d_dl{width:120px;height:50px;margin-left:100px;*display:inline;background:url(/public/cblcn/Ztmb/tl/images/denglu_03.jpg) no-repeat;border:none;float:left;display: block;cursor:pointer;display:inline-block;outline: none ;margin-top:15px}
+.d_zc{width:131px;height:50px;line-height:50px;background:url(/public/cblcn/wdpd/images/zhuce_22.jpg) no-repeat;border:none;float:left;display: block;}
+
+#mfhydl{
+    width:100%;height:38px ;background: url(/public/images/btm_bj_03.png) repeat-x;font-family:'微软雅黑';font-size:16px;color:#fff;line-height:38px;text-align:center;position:fixed;left:0px;bottom:0px ; _position: absolute;
+    _bottom:0;_top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,0)||0)-(parseInt(this.currentStyle.marginBottom,0)||0)));margin-top:50px;display:none
+}
+
+#mfhy{
+    width:100%;height:38px ;background: url(/public/images/btm_bj_03.png) repeat-x;font-family:'微软雅黑';font-size:16px;color:#fff;line-height:38px;text-align:center;position:fixed;left:0px;bottom:0px;_position:absolute;
+     _bottom:0;_top: expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,0)||0)-(parseInt(this.currentStyle.marginBottom,0)||0)));display:none
+}
+#zcrk02 a{text-decoration:underline}
+#zcrk01 a{display:block;width:94px;height:28px}
+        </style>
+         <script>
+            document.write("<s"+"cript type='text/javascript' src='/public/search/zbw/js/search2.min.js?t="+Math.random()+"'></s"+"cript>");
+        </script>
+    </head>
+    <body>
+        <div class="tanc_lanmu" id="dialog-dl" style="display:none;">
+                <div id="login_k" class="denglu">
+                    <div class="d_biaoti">
+                        <div class="d_biao">请输入用户名和密码登录 </div>
+                        <div class="d_guanbi">
+                            <a href="javascript:gb2_login()"><img src="/public/cblcn/dqpd/images/guanbi.jpg" /></a>
+                        </div>
+                    </div>
+                    <div class="d_nr">
+                         <form id="submitForm">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <th width="100" valign="middle" height="50" align="right">用户名：</th>
+                                    <td align="left" style="width:310px;height:41px;"><input type="text" id="name" class="name" /></td>
+                                    <td width="24"></td>
+                                </tr>
+                                <tr>
+                                    <th valign="middle" height="50" align="right">密&nbsp;&nbsp;码：</th>
+                                    <td style="width:310px;height:41px;"><input type="password" id="password" class="name"/></td>
+                                    <td width="24"></td>
+                                </tr>
+                                <tr>
+                                    <th valign="middle" height="50" align="right">验证码：</th>
+                                    <td width="310"><input type="text" id="yzm" class="yanz" onkeyup="aotocheck_yzm();"/>
+                                        <input type="hidden" value="12639d69-4285-4f2c-bf73-17667a05ec88" id="randomID"/>
+                                        <img style="width:80px;height:41px;display:block;float:left" onclick="changeI()" src="/cblcn/member.regist/captcha?randomID=12639d69-4285-4f2c-bf73-17667a05ec88" id="img_random"/>
+                                        <span class="kbq"><a href="javascript:changeI()">看不清？换一张</a></span>
+                                    </td>
+                                    <td width="24"><div id="yzm_ts_i" ></div></td>
+                                </tr>
+                                <tr>
+                                    <td width="100"></td>
+                                    <td colspan="2">
+                                     <div class="no_font" style="vertical-align:middle"><input type="checkbox" style="vertical-align:-2px;" id="ck" checked/><span style="padding-left:5px;color:#666;">记住用户名</span></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div id="cuo" class="no_img" style="display: none;">
+                                            <img src="/public/cblcn/dqpd/images/cuo_18.jpg"/>
+                                        </div>
+                                        <div id="sc" class="no_font"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="button" class="d_dl" onclick="login_submit()"/>
+                                        <span id="zcrk02" style="line-height:60px">还没有用户名？
+
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                         </form>
+                    </div>
+                </div>
+            </div>
+    </body>
+</html>
+        <!--弹出框-->
+         <script type="text/javascript" src="/cblcn/ZhuCeRuKou/searchP"></script>
+
+        <table cellspacing="0" cellpadding="0" border="0" align="center" width="1003" style="margin-bottom:35px">
+    <tbody>
+        <tr>
+            <td>
+                <!--<script src="http://www.chinabidding.com.cn/zbw/tail.js">
+                </script>-->
+                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tbody>
+                        <tr>
+                            <td height="4" bgcolor="#ffffff" valign="top"></td></tr>
+                        <tr>
+                            <td height="5"></td></tr>
+                        <tr><td height="25" bgcolor="#d2d2d2">
+                                <div align="center">
+                                    <span class="style03">
+                                        <a href="http://www.chinabidding.com.cn/zbw/main/gywm.jsp">关于我们</a>  |
+                                        <a href="http://www.chinabidding.com.cn/zbw/main/navigation.jsp">网站导航</a> |
+                                        <a target="_blank" href="http://www.chinabidding.com.cn/zbw/guanggao/ggfw/index.html">广告服务</a> |
+                                        <a href="http://www.chinabidding.com.cn/zbw/main/zjdl.jsp">友情链接</a> |
+                                        <a href="http://www.chinabidding.com.cn/zbw/main/Copyright.jsp">版权所有</a> |
+                                        <a href="http://www.chinabidding.com.cn/zbw/main/zpxx.jsp">招聘信息</a> |
+                                        <a target="_blank" href="http://www.chinabidding.com.cn/zbw/main/help.jsp">帮助信息</a>|
+                                    </span>
+                                    <span class="style16">
+                                        <a target="_blank" href="http://www.chinabidding.com.cn/zbw/research/index.htm">网上调查</a></span>
+                                    <span class="style03"> |
+                                        <a href="http://www.chinabidding.com.cn/zbw/main/lxwm.jsp">联系我们</a>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <p align="center" class="style01">Copyright &copy; 2001-2009 中国采购与招标网 Rights Reserved
+                    <a target="_blank" href="http://www.miibeian.gov.cn">京ICP备09089782号</a>
+                    北京市公安局海淀分局备案编号1101081890
+                </p>
+                <p align="center" class="style01">本站网络实名/通用网址：
+                    <a href="http://www.chinabidding.com.cn">"中国采购与招标网"</a></p>
+                <p align="center" class="style01">
+                    信息发布热线：86-010-82744233、入会咨询：86-010-82743196、客服热线：86-010-82743157、广告热线：86-10-68350571
+                    <span class="style03">
+                        <a href="http://www.chinabidding.com.cn/zbw/main/more.jsp">
+                            <font color="red">   更多联系电话...</font>
+                        </a>
+                    </span>
+                </p>
+                <p align="center" class="style01">
+                    <a target="_blank" href="http://www.hd315.gov.cn/beian/view.asp?bianhao=0102000102500053">
+                        <img height="48" border="0" width="40" src="http://www.chinabidding.com.cn/zbw/images/biaoshi.gif" />
+                    </a>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+$("#float_rm").floatdiv("rightmiddle");
+</script>
+            <script type="text/javascript">
+                var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F53fcbed65fac94cfcae3117cf5b44d39' type='text/javascript'%3E%3C/script%3E"));
+            </script> <script type="text/javascript">
+            var pageTracker = _gat._getTracker("UA-3501599-2");
+            pageTracker._initData();
+            pageTracker._trackPageview();
+            //swfobject.registerObject("FlashID");
+        </script>
+    </body>
+</html>
