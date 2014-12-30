@@ -118,6 +118,20 @@ func ParseListPageToItems(html_string string) []*Item {
 	return items
 }
 
+func ParseDetailPage(item *Item, html_string string) {
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
+	if err != nil {
+		log.Fatal(err)
+	}
+	doc.Find(".f_l.nr_bt1_sf.f_12 li").Each(func(i int, s *goquery.Selection) {
+		if strings.Contains(s.Text(), "招标代理") {
+			splited := strings.Split(s.Text(), ":")
+			agent := splited[len(splited)-1]
+			item.AgentName = agent
+		}
+	})
+}
+
 func ParseListPageToLinks(html_string string) []string {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
@@ -152,19 +166,23 @@ func ParseListPageToLinks(html_string string) []string {
 
 func Start() {
 	cookies := GetCookies(LOGIN_PAGE_URL)
-	// cookies = Login("nmzb", "NMzb2014", cookies)
-	// body := getPage("http://www.chinabidding.com.cn/zbgs/jMGQ.html", cookies)
-	all_items := []*Item{}
-	list_html_str := GetPage(START_URL_MONTHLY, cookies)
-	url_list := ParseListPageToLinks(list_html_str)
-	for i, u := range url_list {
-		html_str := GetPage(u, cookies)
-		items := ParseListPageToItems(html_str)
-		all_items = append(all_items, items...)
-		fmt.Printf("%d %d all_items length: %d\n", i, len(items), len(all_items))
-	}
+	cookies = Login("nmzb", "NMzb2014", cookies)
+	body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
+	item := &Item{}
+	ParseDetailPage(item, body)
+	fmt.Println(item.AgentName)
 
-	for i, item := range all_items {
-		fmt.Printf("%d, %v\n", i, item)
-	}
+	// all_items := []*Item{}
+	// list_html_str := GetPage(START_URL_MONTHLY, cookies)
+	// url_list := ParseListPageToLinks(list_html_str)
+	// for i, u := range url_list {
+	// 	html_str := GetPage(u, cookies)
+	// 	items := ParseListPageToItems(html_str)
+	// 	all_items = append(all_items, items...)
+	// 	fmt.Printf("%d %d all_items length: %d\n", i, len(items), len(all_items))
+	// }
+
+	// for i, item := range all_items {
+	// 	fmt.Printf("%d, %v\n", i, item)
+	// }
 }
