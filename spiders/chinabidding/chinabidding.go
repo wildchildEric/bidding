@@ -126,8 +126,8 @@ func ParseListPageToLinks(html_string string) []string {
 	var list_page_urls []string
 	s := doc.Find("#pages a").Last()
 	href, exist := s.Attr("href")
-	if exist {
-		fmt.Println(href)
+	if !exist {
+		panic("not end page link found")
 	}
 	u, err := url.Parse(ROOT_URL + href)
 	if err != nil {
@@ -148,4 +148,23 @@ func ParseListPageToLinks(html_string string) []string {
 	}
 
 	return list_page_urls
+}
+
+func Start() {
+	cookies := GetCookies(LOGIN_PAGE_URL)
+	// cookies = Login("nmzb", "NMzb2014", cookies)
+	// body := getPage("http://www.chinabidding.com.cn/zbgs/jMGQ.html", cookies)
+	all_items := make([]*Item, 0)
+	list_html_str := GetPage(START_URL_MONTHLY, cookies)
+	url_list := ParseListPageToLinks(list_html_str)
+	for i, u := range url_list {
+		html_str := GetPage(u, cookies)
+		items := ParseListPageToItems(html_str)
+		all_items = append(all_items, items...)
+		fmt.Printf("%d %d all_items length: %d\n", i, len(items), len(all_items))
+	}
+
+	for i, item := range all_items {
+		fmt.Printf("%d, %v\n", i, item)
+	}
 }
