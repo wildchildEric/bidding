@@ -73,12 +73,13 @@ func getPage(urlStr string, cookies []*http.Cookie) string {
 	return string(body)
 }
 
-func parseListPage(html_string string) {
+func parseListPage(html_string string) []*Item {
 	reader := strings.NewReader(html_string)
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		log.Fatal(err)
 	}
+	var items []*Item
 	parse_func := func(i int, s *goquery.Selection) {
 		item := &Item{}
 		s.Find("td").Each(func(i int, s *goquery.Selection) {
@@ -97,11 +98,11 @@ func parseListPage(html_string string) {
 				item.Date = strings.TrimSpace(slice_strings[len(slice_strings)-1])
 			}
 		})
-		fmt.Printf("%d %q %q %q %q %q %q\n", i, item.Title, item.Category, item.Region, item.Industry, item.Date, item.UrlDetail)
+		items = append(items, item)
 	}
-
 	doc.Find(".listrow1").Each(parse_func)
 	doc.Find(".listrow2").Each(parse_func)
+	return items
 }
 
 func main() {
@@ -112,5 +113,9 @@ func main() {
 	// fmt.Println(body)
 
 	list_html_str := getPage("http://www.chinabidding.com.cn/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=month", cookies)
-	parseListPage(list_html_str)
+	items := parseListPage(list_html_str)
+	for _, ele := range items {
+		fmt.Println(ele)
+		// fmt.Printf("%d %q %q %q %q %q %q\n", index, ele.Title, ele.Category, ele.Region, ele.Industry, ele.Date, ele.UrlDetail)
+	}
 }
