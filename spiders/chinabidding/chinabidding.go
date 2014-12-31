@@ -137,7 +137,6 @@ func ParseListPageToLinks(html_string string) []string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var list_page_urls []string
 	s := doc.Find("#pages a").Last()
 	href, exist := s.Attr("href")
 	if !exist {
@@ -145,44 +144,44 @@ func ParseListPageToLinks(html_string string) []string {
 	}
 	u, err := url.Parse(ROOT_URL + href)
 	if err != nil {
+		log.Fatal(err)
 		panic(err)
 	}
 	m, _ := url.ParseQuery(u.RawQuery)
 	max_page, err := strconv.Atoi(m["page"][0])
 	if err != nil {
 		// handle error
-		fmt.Println(err)
+		log.Fatal(err)
 		panic(err)
 	}
-
+	list_page_urls := make([]string, 0, max_page)
 	for i := 1; i <= max_page; i++ {
 		m.Set("page", strconv.Itoa(i))
 		url := u.Scheme + "://" + u.Host + u.Path + "?" + m.Encode()
 		list_page_urls = append(list_page_urls, url)
 	}
-
 	return list_page_urls
 }
 
 func Start() {
 	cookies := GetCookies(LOGIN_PAGE_URL)
-	cookies = Login("nmzb", "NMzb2014", cookies)
-	body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
-	item := &Item{}
-	ParseDetailPage(item, body)
-	fmt.Println(item.AgentName)
+	// cookies = Login("nmzb", "NMzb2014", cookies)
+	// body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
+	// item := &Item{}
+	// ParseDetailPage(item, body)
+	// fmt.Println(item.AgentName)
 
-	// all_items := []*Item{}
-	// list_html_str := GetPage(START_URL_MONTHLY, cookies)
-	// url_list := ParseListPageToLinks(list_html_str)
-	// for i, u := range url_list {
-	// 	html_str := GetPage(u, cookies)
-	// 	items := ParseListPageToItems(html_str)
-	// 	all_items = append(all_items, items...)
-	// 	fmt.Printf("%d %d all_items length: %d\n", i, len(items), len(all_items))
-	// }
+	all_items := make([]*Item, 0, 4100)
+	list_html_str := GetPage(START_URL_MONTHLY, cookies)
+	url_list := ParseListPageToLinks(list_html_str)
+	for i, u := range url_list {
+		html_str := GetPage(u, cookies)
+		items := ParseListPageToItems(html_str)
+		all_items = append(all_items, items...)
+		fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
+	}
 
-	// for i, item := range all_items {
-	// 	fmt.Printf("%d, %v\n", i, item)
-	// }
+	for i, item := range all_items {
+		fmt.Printf("%d, %v\n", i, item)
+	}
 }
