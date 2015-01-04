@@ -162,7 +162,7 @@ func ParseListPageToLinks(html_string string) ([]string, error) {
 	return list_page_urls, nil
 }
 
-func Start1() {
+func StartSync() {
 	start := time.Now()
 	cookies, err := GetCookies(LOGIN_PAGE_URL)
 	if err != nil {
@@ -205,7 +205,12 @@ func Start() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// cookies, err = Login("nmzb", "NMzb2014", cookies)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
 	// body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
 	// item := &Item{}
 	// ParseDetailPage(item, body)
@@ -224,6 +229,7 @@ func Start() {
 	}
 	ch := make(chan []*Item, 4003)
 	for _, u := range url_list {
+		time.Sleep(100 * time.Millisecond)
 		go func() {
 			html_str, err := GetPage(u, cookies)
 			if err != nil {
@@ -237,10 +243,9 @@ func Start() {
 			}
 			ch <- items
 		}()
-		// all_items = append(all_items, items...)
 	}
 	for i := 0; i < len(url_list); i++ {
-		timeout := time.After(2 * time.Second)
+		timeout := time.After(5 * time.Second)
 		select {
 		case items := <-ch:
 			all_items = append(all_items, items...)
@@ -249,8 +254,9 @@ func Start() {
 			fmt.Println("timed out")
 		}
 	}
-	for i, item := range all_items {
-		fmt.Printf("%d, %v\n", i, item)
-	}
+	// for i, item := range all_items {
+	// 	fmt.Printf("%d, %v\n", i, item)
+	// }
+	fmt.Println(len(all_items))
 	fmt.Println(time.Now().Sub(start))
 }
