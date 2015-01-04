@@ -20,6 +20,8 @@ const (
 	START_URL_YEARLY  = ROOT_URL + "/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=year"
 	LOGIN_PAGE_URL    = ROOT_URL + "/cblcn/member.login/login"
 	LOGIN_CHECK_URL   = ROOT_URL + "/cblcn/member.login/logincheck"
+	REQUEST_INTERVAL  = 30 * time.Millisecond
+	TIME_OUT          = 2 * time.Second
 )
 
 type Item struct {
@@ -184,14 +186,14 @@ func StartAsync() {
 		log.Println(err)
 	}
 	for _, u := range url_list {
-		time.Sleep(30 * time.Millisecond)
+		time.Sleep(REQUEST_INTERVAL)
 		ch0, ch1 := util.GetPageAsync(u, cookies)
 		arr_chan = append(arr_chan, [2]chan string{ch0, ch1})
 	}
 	for i, chan_arr := range arr_chan {
 		ch0 := chan_arr[0]
 		ch1 := chan_arr[1]
-		timeout := time.After(2 * time.Second)
+		timeout := time.After(TIME_OUT)
 		select {
 		case content := <-ch0:
 			items, err := ParseListPageToItems(content)
@@ -241,31 +243,32 @@ func Start() {
 		log.Println(err)
 	}
 	ch := make(chan []*Item)
-	ch_failed_url := make(chan string)
+	ch_f := make(chan string)
 	for _, u := range url_list {
-		time.Sleep(30 * time.Millisecond)
+		time.Sleep(REQUEST_INTERVAL)
 		go func() {
 			html_str, err := util.GetPage(u, cookies)
 			if err != nil {
 				log.Println(err)
-				ch_failed_url <- u
+				ch_f <- u
 				return
 			}
 			items, err := ParseListPageToItems(html_str)
 			if err != nil {
 				log.Println(err)
+				ch_f <- u
 				return
 			}
 			ch <- items
 		}()
 	}
 	for i := 0; i < len(url_list); i++ {
-		timeout := time.After(2 * time.Second)
+		timeout := time.After(TIME_OUT)
 		select {
 		case items := <-ch:
 			all_items = append(all_items, items...)
 			log.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
-		case failed_url := <-ch_failed_url:
+		case failed_url := <-ch_f:
 			arr_failed_url = append(arr_failed_url, failed_url)
 		case <-timeout:
 			log.Printf("%d item timed out", i)
