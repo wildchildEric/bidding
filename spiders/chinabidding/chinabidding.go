@@ -77,6 +77,9 @@ func GetPage(urlStr string, cookies []*http.Cookie) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if resp.StatusCode != http.StatusOK {
+		return "", errors.New(fmt.Sprintf("Response with incorrect status code: %d", resp.StatusCode))
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -166,37 +169,33 @@ func StartSync() {
 	start := time.Now()
 	cookies, err := GetCookies(LOGIN_PAGE_URL)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	all_items := make([]*Item, 0, 4100)
 	list_html_str, err := GetPage(START_URL_MONTHLY, cookies)
 	if err != nil {
-		log.Fatal(err)
-		panic(err)
+		log.Println(err)
 	}
 	url_list, err := ParseListPageToLinks(list_html_str)
 	if err != nil {
-		log.Fatal(err)
-		panic(err)
+		log.Println(err)
 	}
 	for i, u := range url_list {
 		html_str, err := GetPage(u, cookies)
 		if err != nil {
-			log.Fatal(err)
-			panic(err)
+			log.Println(err)
 		}
 		items, err := ParseListPageToItems(html_str)
 		if err != nil {
 			log.Fatal(err)
-			panic(err)
 		}
 		all_items = append(all_items, items...)
-		fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
+		log.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
 	}
 	for i, item := range all_items {
-		fmt.Printf("%d, %v\n", i, item)
+		log.Printf("%d, %v\n", i, item)
 	}
-	fmt.Println(time.Now().Sub(start))
+	log.Println(time.Now().Sub(start))
 }
 
 func Start() {
@@ -219,44 +218,42 @@ func Start() {
 	all_items := make([]*Item, 0, 4100)
 	list_html_str, err := GetPage(START_URL_MONTHLY, cookies)
 	if err != nil {
-		log.Fatal(err)
-		panic(err)
+		log.Println(err)
 	}
 	url_list, err := ParseListPageToLinks(list_html_str)
 	if err != nil {
-		log.Fatal(err)
-		panic(err)
+		log.Println(err)
 	}
 	ch := make(chan []*Item, 4003)
 	for _, u := range url_list {
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(90 * time.Millisecond)
 		go func() {
 			html_str, err := GetPage(u, cookies)
 			if err != nil {
-				log.Fatal(err)
-				panic(err)
+				log.Println(err)
+				return
 			}
 			items, err := ParseListPageToItems(html_str)
 			if err != nil {
-				log.Fatal(err)
-				panic(err)
+				log.Println(err)
+				return
 			}
 			ch <- items
 		}()
 	}
 	for i := 0; i < len(url_list); i++ {
-		timeout := time.After(5 * time.Second)
+		timeout := time.After(2 * time.Second)
 		select {
 		case items := <-ch:
 			all_items = append(all_items, items...)
-			fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
+			log.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
 		case <-timeout:
-			fmt.Println("timed out")
+			log.Printf("%d item timed out", i)
 		}
 	}
 	// for i, item := range all_items {
 	// 	fmt.Printf("%d, %v\n", i, item)
 	// }
-	fmt.Println(len(all_items))
-	fmt.Println(time.Now().Sub(start))
+	log.Println(len(all_items))
+	log.Println(time.Now().Sub(start))
 }
