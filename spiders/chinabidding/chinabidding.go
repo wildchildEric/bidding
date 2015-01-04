@@ -224,9 +224,9 @@ func Start() {
 	if err != nil {
 		log.Println(err)
 	}
-	ch := make(chan []*Item, 4003)
+	ch := make(chan []*Item)
 	for _, u := range url_list {
-		time.Sleep(90 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 		go func() {
 			html_str, err := GetPage(u, cookies)
 			if err != nil {
