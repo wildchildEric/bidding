@@ -21,7 +21,7 @@ const (
 	LOGIN_PAGE_URL    = ROOT_URL + "/cblcn/member.login/login"
 	LOGIN_CHECK_URL   = ROOT_URL + "/cblcn/member.login/logincheck"
 	REQUEST_INTERVAL  = 30 * time.Millisecond
-	TIME_OUT          = 2 * time.Second
+	REQUEST_TIME_OUT  = 2 * time.Second
 )
 
 type Item struct {
@@ -193,7 +193,7 @@ func StartAsync() {
 	for i, chan_arr := range arr_chan {
 		ch0 := chan_arr[0]
 		ch1 := chan_arr[1]
-		timeout := time.After(TIME_OUT)
+		timeout := time.After(REQUEST_TIME_OUT)
 		select {
 		case content := <-ch0:
 			items, err := ParseListPageToItems(content)
@@ -263,7 +263,7 @@ func Start() {
 		}()
 	}
 	for i := 0; i < len(url_list); i++ {
-		timeout := time.After(TIME_OUT)
+		timeout := time.After(REQUEST_TIME_OUT)
 		select {
 		case items := <-ch:
 			all_items = append(all_items, items...)
