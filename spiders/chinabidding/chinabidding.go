@@ -176,19 +176,23 @@ func Start() {
 	list_html_str, err := GetPage(START_URL_MONTHLY, cookies)
 	if err != nil {
 		log.Fatal(err)
+		panic(err)
 	}
 	url_list, err := ParseListPageToLinks(list_html_str)
 	if err != nil {
 		log.Fatal(err)
+		panic(err)
 	}
 	for i, u := range url_list {
 		html_str, err := GetPage(u, cookies)
 		if err != nil {
 			log.Fatal(err)
+			panic(err)
 		}
 		items, err := ParseListPageToItems(html_str)
 		if err != nil {
 			log.Fatal(err)
+			panic(err)
 		}
 		all_items = append(all_items, items...)
 		fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
