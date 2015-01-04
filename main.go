@@ -1,11 +1,13 @@
 package main
 
 import (
-	"wildchild.me/biddinginfo/spiders/chinabidding"
 	// "fmt"
+	// "time"
+	"wildchild.me/biddinginfo/spiders/chinabidding"
 )
 
 func main() {
+	// fmt.Println(time.Now())
 	chinabidding.Start()
 	// users := []string{"Time", "Joe", "Bob", "Tom"}
 	// a := users[0:1]

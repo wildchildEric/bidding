@@ -1,6 +1,7 @@
 package chinabidding
 
 import (
+	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io/ioutil"
@@ -30,22 +31,22 @@ type Item struct {
 	UrlDetail string
 }
 
-func GetCookies(url string) []*http.Cookie {
+func GetCookies(url string) ([]*http.Cookie, error) {
 	resp, err := http.Head(url)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return resp.Cookies()
+	return resp.Cookies(), nil
 }
 
-func Login(name string, pass string, cookies []*http.Cookie) []*http.Cookie {
+func Login(name string, pass string, cookies []*http.Cookie) ([]*http.Cookie, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest(
 		"POST",
 		LOGIN_CHECK_URL,
 		strings.NewReader(fmt.Sprintf("name=%s&password=%s", name, pass)))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	for _, c := range cookies {
@@ -53,41 +54,40 @@ func Login(name string, pass string, cookies []*http.Cookie) []*http.Cookie {
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	if resp.StatusCode == 200 {
-		return resp.Cookies()
+		return resp.Cookies(), nil
 	} else {
-		log.Fatal("Login failed.")
-		return nil
+		return nil, errors.New("Login Failed.")
 	}
 }
 
-func GetPage(urlStr string, cookies []*http.Cookie) string {
+func GetPage(urlStr string, cookies []*http.Cookie) (string, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", urlStr, nil)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	for _, c := range cookies {
 		req.AddCookie(c)
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
-	return string(body)
+	return string(body), nil
 }
 
-func ParseListPageToItems(html_string string) []*Item {
+func ParseListPageToItems(html_string string) ([]*Item, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	var items []*Item
 	parse_func := func(i int, s *goquery.Selection) {
@@ -115,13 +115,13 @@ func ParseListPageToItems(html_string string) []*Item {
 	}
 	doc.Find(".listrow1").Each(parse_func)
 	doc.Find(".listrow2").Each(parse_func)
-	return items
+	return items, nil
 }
 
-func ParseDetailPage(item *Item, html_string string) {
+func ParseDetailPage(item *Item, html_string string) error {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	doc.Find(".f_l.nr_bt1_sf.f_12 li").Each(func(i int, s *goquery.Selection) {
 		if strings.Contains(s.Text(), "招标代理") {
@@ -130,29 +130,27 @@ func ParseDetailPage(item *Item, html_string string) {
 			item.AgentName = agent
 		}
 	})
+	return nil
 }
 
-func ParseListPageToLinks(html_string string) []string {
+func ParseListPageToLinks(html_string string) ([]string, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	s := doc.Find("#pages a").Last()
 	href, exist := s.Attr("href")
 	if !exist {
-		panic("not end page link found")
+		return nil, errors.New("not end page link found")
 	}
 	u, err := url.Parse(ROOT_URL + href)
 	if err != nil {
-		log.Fatal(err)
-		panic(err)
+		return nil, err
 	}
 	m, _ := url.ParseQuery(u.RawQuery)
 	max_page, err := strconv.Atoi(m["page"][0])
 	if err != nil {
-		// handle error
-		log.Fatal(err)
-		panic(err)
+		return nil, err
 	}
 	list_page_urls := make([]string, 0, max_page)
 	for i := 1; i <= max_page; i++ {
@@ -160,23 +158,38 @@ func ParseListPageToLinks(html_string string) []string {
 		url := u.Scheme + "://" + u.Host + u.Path + "?" + m.Encode()
 		list_page_urls = append(list_page_urls, url)
 	}
-	return list_page_urls
+	return list_page_urls, nil
 }
 
 func Start() {
-	cookies := GetCookies(LOGIN_PAGE_URL)
-	// cookies = Login("nmzb", "NMzb2014", cookies)
+	cookies, err := GetCookies(LOGIN_PAGE_URL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// cookies, err = Login("nmzb", "NMzb2014", cookies)
 	// body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
 	// item := &Item{}
 	// ParseDetailPage(item, body)
 	// fmt.Println(item.AgentName)
 
 	all_items := make([]*Item, 0, 4100)
-	list_html_str := GetPage(START_URL_MONTHLY, cookies)
-	url_list := ParseListPageToLinks(list_html_str)
+	list_html_str, err := GetPage(START_URL_MONTHLY, cookies)
+	if err != nil {
+		log.Fatal(err)
+	}
+	url_list, err := ParseListPageToLinks(list_html_str)
+	if err != nil {
+		log.Fatal(err)
+	}
 	for i, u := range url_list {
-		html_str := GetPage(u, cookies)
-		items := ParseListPageToItems(html_str)
+		html_str, err := GetPage(u, cookies)
+		if err != nil {
+			log.Fatal(err)
+		}
+		items, err := ParseListPageToItems(html_str)
+		if err != nil {
+			log.Fatal(err)
+		}
 		all_items = append(all_items, items...)
 		fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
 	}
