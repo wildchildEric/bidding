@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -56,7 +57,7 @@ func Login(name string, pass string, cookies []*http.Cookie) ([]*http.Cookie, er
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode == 200 {
+	if resp.StatusCode == http.StatusOK {
 		return resp.Cookies(), nil
 	} else {
 		return nil, errors.New("Login Failed.")
@@ -161,17 +162,12 @@ func ParseListPageToLinks(html_string string) ([]string, error) {
 	return list_page_urls, nil
 }
 
-func Start() {
+func Start1() {
+	start := time.Now()
 	cookies, err := GetCookies(LOGIN_PAGE_URL)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// cookies, err = Login("nmzb", "NMzb2014", cookies)
-	// body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
-	// item := &Item{}
-	// ParseDetailPage(item, body)
-	// fmt.Println(item.AgentName)
-
 	all_items := make([]*Item, 0, 4100)
 	list_html_str, err := GetPage(START_URL_MONTHLY, cookies)
 	if err != nil {
@@ -197,8 +193,64 @@ func Start() {
 		all_items = append(all_items, items...)
 		fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
 	}
-
 	for i, item := range all_items {
 		fmt.Printf("%d, %v\n", i, item)
 	}
+	fmt.Println(time.Now().Sub(start))
+}
+
+func Start() {
+	start := time.Now()
+	cookies, err := GetCookies(LOGIN_PAGE_URL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// cookies, err = Login("nmzb", "NMzb2014", cookies)
+	// body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
+	// item := &Item{}
+	// ParseDetailPage(item, body)
+	// fmt.Println(item.AgentName)
+
+	all_items := make([]*Item, 0, 4100)
+	list_html_str, err := GetPage(START_URL_MONTHLY, cookies)
+	if err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+	url_list, err := ParseListPageToLinks(list_html_str)
+	if err != nil {
+		log.Fatal(err)
+		panic(err)
+	}
+	ch := make(chan []*Item, 4003)
+	for _, u := range url_list {
+		go func() {
+			html_str, err := GetPage(u, cookies)
+			if err != nil {
+				log.Fatal(err)
+				panic(err)
+			}
+			items, err := ParseListPageToItems(html_str)
+			if err != nil {
+				log.Fatal(err)
+				panic(err)
+			}
+			ch <- items
+		}()
+		// all_items = append(all_items, items...)
+	}
+	for i := 0; i < len(url_list); i++ {
+		timeout := time.After(2 * time.Second)
+		select {
+		case items := <-ch:
+			all_items = append(all_items, items...)
+			fmt.Printf("%d %d all_items length: %d cap: %d\n", i, len(items), len(all_items), cap(all_items))
+		case <-timeout:
+			fmt.Println("timed out")
+		}
+	}
+	for i, item := range all_items {
+		fmt.Printf("%d, %v\n", i, item)
+	}
+	fmt.Println(time.Now().Sub(start))
 }
