@@ -2,7 +2,6 @@ package chinabidding
 
 import (
 	"errors"
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/url"
@@ -117,6 +116,7 @@ func Start() {
 			log.Fatal(err)
 		}
 		all_items := make([]*Item, 0, 4100)
+		all_item_urls := make([]string, 0, 4100)
 		html_str, err := util.GetPage(START_URL_MONTHLY, cookies)
 		if err != nil {
 			log.Println(err)
@@ -133,17 +133,38 @@ func Start() {
 				continue
 			}
 			all_items = append(all_items, items...)
+			item_urls := make([]string, 0, len(items))
+			for _, v := range items {
+				item_urls = append(item_urls, v.UrlDetail)
+			}
+			all_item_urls = append(all_item_urls, item_urls...)
 		}
-		for i, item := range all_items {
-			fmt.Printf("%d %v\n", i, item)
-		}
-		log.Println(len(all_items))
 
-		// cookies, err = util.Login(LOGIN_CHECK_URL,
-		// 	map[string]string{"name": "nmzb", "password": "NMzb2014"},
-		// 	cookies)
-		// if err != nil {
-		// 	log.Fatal(err)
+		// for i, item := range all_items {
+		// 	fmt.Printf("%d %v\n", i, item)
+		// }
+
+		// for i, u := range all_item_urls {
+		// 	fmt.Printf("%d %v\n", i, u)
+		// }
+
+		log.Println(len(all_items))
+		log.Println(len(all_item_urls))
+
+		cookies, err = util.Login(LOGIN_CHECK_URL,
+			map[string]string{"name": "nmzb", "password": "NMzb2014"}, cookies)
+		if err != nil {
+			log.Fatal(err)
+		}
+		htmls = util.DownLoadPages(all_item_urls, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
+		log.Printf("%d", len(htmls))
+
+		// for i, h := range htmls {
+		// 	ParseDetailPage(all_items[i], h)
+		// }
+
+		// for i, item := range all_items {
+		// 	fmt.Printf("%d %+v\n", i, item)
 		// }
 
 		// body, err := util.GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)

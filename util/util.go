@@ -85,11 +85,13 @@ func GetPageAsync(urlStr string, cookies []*http.Cookie) (<-chan string, <-chan 
 	return ch_content, ch_failed_url
 }
 
-func DownLoadPages(urls []string, cookies []*http.Cookie, interval time.Duration, requestTimeout time.Duration) []string {
+func DownLoadPages(urls []string, cookies []*http.Cookie,
+	interval time.Duration, requestTimeout time.Duration) []string {
+
 	ch := make(chan string)
 	ch_f := make(chan string)
-	arr_html := make([]string, 0, 4100)
-	failed_urls := make([]string, 0, 100)
+	arr_html := make([]string, 0, len(urls))
+	failed_urls := make([]string, 0, len(urls)/2)
 	for _, u := range urls {
 		time.Sleep(interval)
 		go func() {
