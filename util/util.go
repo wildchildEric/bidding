@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func GetCookies(url string) ([]*http.Cookie, error) {
@@ -38,6 +39,35 @@ func GetPage(urlStr string, cookies []*http.Cookie) (string, error) {
 		return "", err
 	}
 	return string(body), nil
+}
+
+func Login(url string, loginMap map[string]string, cookies []*http.Cookie) ([]*http.Cookie, error) {
+	arr := make([]string, 0, 2)
+	for k, v := range loginMap {
+		arr = append(arr, fmt.Sprintf("%s=%s", k, v))
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest(
+		"POST",
+		url,
+		strings.NewReader(strings.Join(arr, "&")))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	for _, c := range cookies {
+		req.AddCookie(c)
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode == http.StatusOK {
+		return resp.Cookies(), nil
+	} else {
+		return nil, errors.New("Login Failed.")
+	}
 }
 
 func GetPageAsync(urlStr string, cookies []*http.Cookie) (<-chan string, <-chan string) {

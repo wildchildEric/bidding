@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
-	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -32,30 +31,6 @@ type Item struct {
 	Date      string
 	AgentName string
 	UrlDetail string
-}
-
-func Login(name string, pass string, cookies []*http.Cookie) ([]*http.Cookie, error) {
-	client := &http.Client{}
-	req, err := http.NewRequest(
-		"POST",
-		LOGIN_CHECK_URL,
-		strings.NewReader(fmt.Sprintf("name=%s&password=%s", name, pass)))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	for _, c := range cookies {
-		req.AddCookie(c)
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	if resp.StatusCode == http.StatusOK {
-		return resp.Cookies(), nil
-	} else {
-		return nil, errors.New("Login Failed.")
-	}
 }
 
 func ParseListPageToItems(html_string string) ([]*Item, error) {
@@ -226,15 +201,17 @@ func Start() {
 		log.Fatal(err)
 	}
 
-	// cookies, err = Login("nmzb", "NMzb2014", cookies)
+	// cookies, err = util.Login(LOGIN_CHECK_URL,
+	// 	map[string]string{"name": "nmzb", "password": "NMzb2014"},
+	// 	cookies)
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 
-	// body := GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
-	// item := &Item{}
-	// ParseDetailPage(item, body)
-	// fmt.Println(item.AgentName)
+	body, err := util.GetPage("http://www.chinabidding.com.cn/zbgg/F5hc.html", cookies)
+	item := &Item{}
+	ParseDetailPage(item, body)
+	fmt.Println(item.AgentName)
 
 	all_items := make([]*Item, 0, 4100)
 	arr_failed_url := make([]string, 0, 100)
