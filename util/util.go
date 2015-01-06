@@ -89,7 +89,7 @@ func DownLoadPages(urls []string, cookies []*http.Cookie, interval time.Duration
 	ch := make(chan string)
 	ch_f := make(chan string)
 	arr_html := make([]string, 0, 4100)
-	arr_failed_url := make([]string, 0, 100)
+	failed_urls := make([]string, 0, 100)
 	for _, u := range urls {
 		time.Sleep(interval)
 		go func() {
@@ -107,15 +107,15 @@ func DownLoadPages(urls []string, cookies []*http.Cookie, interval time.Duration
 		select {
 		case html_str := <-ch:
 			arr_html = append(arr_html, html_str)
-		case failed_url := <-ch_f:
-			arr_failed_url = append(arr_failed_url, failed_url)
+		case url := <-ch_f:
+			failed_urls = append(failed_urls, url)
 		case <-timeout:
 			log.Printf("%d item timed out", i)
-			arr_failed_url = append(arr_failed_url, urls[i])
+			failed_urls = append(failed_urls, urls[i])
 		}
 	}
-	if len(arr_failed_url) > 0 {
-		arr := DownLoadPages(arr_failed_url,
+	if len(failed_urls) > 0 {
+		arr := DownLoadPages(failed_urls,
 			cookies,
 			interval+10*time.Millisecond,
 			requestTimeout+1*time.Second)
