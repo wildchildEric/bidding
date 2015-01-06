@@ -46,7 +46,6 @@ func Login(url string, loginMap map[string]string, cookies []*http.Cookie) ([]*h
 	for k, v := range loginMap {
 		arr = append(arr, fmt.Sprintf("%s=%s", k, v))
 	}
-
 	client := &http.Client{}
 	req, err := http.NewRequest(
 		"POST",
