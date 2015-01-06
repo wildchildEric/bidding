@@ -40,7 +40,7 @@ func GetPage(urlStr string, cookies []*http.Cookie) (string, error) {
 	return string(body), nil
 }
 
-func GetPageAsync(urlStr string, cookies []*http.Cookie) (chan string, chan string) {
+func GetPageAsync(urlStr string, cookies []*http.Cookie) (<-chan string, <-chan string) {
 	ch_content := make(chan string)
 	ch_failed_url := make(chan string)
 	go func() {

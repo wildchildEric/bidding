@@ -20,7 +20,7 @@ const (
 	START_URL_YEARLY  = ROOT_URL + "/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=year"
 	LOGIN_PAGE_URL    = ROOT_URL + "/cblcn/member.login/login"
 	LOGIN_CHECK_URL   = ROOT_URL + "/cblcn/member.login/logincheck"
-	REQUEST_INTERVAL  = 30 * time.Millisecond
+	REQUEST_INTERVAL  = 90 * time.Millisecond
 	REQUEST_TIME_OUT  = 2 * time.Second
 )
 
@@ -176,7 +176,7 @@ func StartAsync() {
 	}
 	all_items := make([]*Item, 0, 4100)
 	arr_failed_url := make([]string, 0, 100)
-	arr_chan := make([][2]chan string, 0, 4100)
+	arr_chan := make([][2]<-chan string, 0, 4100)
 	list_html_str, err := util.GetPage(START_URL_MONTHLY, cookies)
 	if err != nil {
 		log.Println(err)
@@ -188,7 +188,7 @@ func StartAsync() {
 	for _, u := range url_list {
 		time.Sleep(REQUEST_INTERVAL)
 		ch0, ch1 := util.GetPageAsync(u, cookies)
-		arr_chan = append(arr_chan, [2]chan string{ch0, ch1})
+		arr_chan = append(arr_chan, [2]<-chan string{ch0, ch1})
 	}
 	for i, chan_arr := range arr_chan {
 		ch0 := chan_arr[0]
@@ -209,6 +209,10 @@ func StartAsync() {
 			arr_failed_url = append(arr_failed_url, url_list[i])
 			log.Printf("%d item timed out", i)
 		}
+	}
+	for i, item := range all_items {
+		fmt.Println(i)
+		fmt.Printf("%+v\n", item)
 	}
 	log.Println(len(all_items))
 	log.Println(len(arr_failed_url) * 22)
@@ -276,7 +280,7 @@ func Start() {
 		}
 	}
 	// for i, item := range all_items {
-	// 	fmt.Printf("%d, %v\n", i, item)
+	// 	fmt.Printf("%d %v\n", i, item)
 	// }
 	log.Println(len(all_items))
 	log.Println(len(arr_failed_url) * 22)
