@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func GetCookies(url string) ([]*http.Cookie, error) {
@@ -82,4 +83,49 @@ func GetPageAsync(urlStr string, cookies []*http.Cookie) (<-chan string, <-chan 
 		ch_content <- html_str
 	}()
 	return ch_content, ch_failed_url
+}
+
+func DownLoadPages(urlList []string, cookies []*http.Cookie, requestInterval time.Duration, requestTimeout time.Duration) []string {
+	ch := make(chan string)
+	ch_f := make(chan string)
+	arr_html := make([]string, 0, 4100)
+	arr_failed_url := make([]string, 0, 100)
+	for _, u := range urlList {
+		time.Sleep(requestInterval)
+		go func() {
+			html_str, err := GetPage(u, cookies)
+			if err != nil {
+				log.Println(err)
+				ch_f <- u
+				return
+			}
+			ch <- html_str
+		}()
+	}
+	for i := 0; i < len(urlList); i++ {
+		timeout := time.After(requestTimeout)
+		select {
+		case html_str := <-ch:
+			arr_html = append(arr_html, html_str)
+		case failed_url := <-ch_f:
+			arr_failed_url = append(arr_failed_url, failed_url)
+		case <-timeout:
+			log.Printf("%d item timed out", i)
+			arr_failed_url = append(arr_failed_url, urlList[i])
+		}
+	}
+	if len(arr_failed_url) > 0 {
+		arr := DownLoadPages(arr_failed_url,
+			cookies,
+			requestInterval+10*time.Millisecond,
+			requestTimeout+1*time.Second)
+		arr_html = append(arr_html, arr...)
+	}
+	return arr_html
+}
+
+func LogInvokeTime(f func()) {
+	start := time.Now()
+	f()
+	log.Println(time.Now().Sub(start))
 }
