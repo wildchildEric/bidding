@@ -116,6 +116,29 @@ func Start() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		all_items := make([]*Item, 0, 4100)
+		html_str, err := util.GetPage(START_URL_MONTHLY, cookies)
+		if err != nil {
+			log.Println(err)
+		}
+		urls, err := ParseListPageToLinks(html_str)
+		if err != nil {
+			log.Println(err)
+		}
+		htmls := util.DownLoadPages(urls, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
+		for i := 0; i < len(htmls); i++ {
+			items, err := ParseListPageToItems(htmls[i])
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			all_items = append(all_items, items...)
+		}
+		for i, item := range all_items {
+			fmt.Printf("%d %v\n", i, item)
+		}
+		log.Println(len(all_items))
+
 		// cookies, err = util.Login(LOGIN_CHECK_URL,
 		// 	map[string]string{"name": "nmzb", "password": "NMzb2014"},
 		// 	cookies)
@@ -127,28 +150,5 @@ func Start() {
 		// item := &Item{}
 		// ParseDetailPage(item, body)
 		// fmt.Println(item.AgentName)
-
-		all_items := make([]*Item, 0, 4100)
-		list_html_str, err := util.GetPage(START_URL_MONTHLY, cookies)
-		if err != nil {
-			log.Println(err)
-		}
-		url_list, err := ParseListPageToLinks(list_html_str)
-		if err != nil {
-			log.Println(err)
-		}
-		arr_html := util.DownLoadPages(url_list, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
-		for i := 0; i < len(arr_html); i++ {
-			items, err := ParseListPageToItems(arr_html[i])
-			if err != nil {
-				log.Println(err)
-				continue
-			}
-			all_items = append(all_items, items...)
-		}
-		for i, item := range all_items {
-			fmt.Printf("%d %v\n", i, item)
-		}
-		log.Println(len(all_items))
 	})
 }
