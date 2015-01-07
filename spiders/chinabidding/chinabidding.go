@@ -19,7 +19,7 @@ const (
 	START_URL_YEARLY  = ROOT_URL + "/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=year"
 	LOGIN_PAGE_URL    = ROOT_URL + "/cblcn/member.login/login"
 	LOGIN_CHECK_URL   = ROOT_URL + "/cblcn/member.login/logincheck"
-	REQUEST_INTERVAL  = 10 * time.Millisecond
+	REQUEST_INTERVAL  = 90 * time.Millisecond
 	REQUEST_TIME_OUT  = 3 * time.Second
 )
 
@@ -62,13 +62,16 @@ func ParseDetailPage(item *db.Item, html_string string) error {
 	if err != nil {
 		return err
 	}
-	doc.Find(".f_l.nr_bt1_sf.f_12 li").Each(func(i int, s *goquery.Selection) {
+	s := doc.Find(".f_l.nr_bt1_sf.f_12 li").Each(func(i int, s *goquery.Selection) {
 		if strings.Contains(s.Text(), "招标代理") {
 			splited := strings.Split(s.Text(), ":")
 			agent := splited[len(splited)-1]
 			item.AgentName = agent
 		}
 	})
+	if s.Size() == 0 {
+		return errors.New("页面不包含有效信息")
+	}
 	return nil
 }
 
@@ -102,13 +105,13 @@ func ParseListPageToLinks(html_string string) ([]string, error) {
 
 func Start() {
 	util.LogInvokeTime(func() {
-		cookies, err := util.GetCookies(LOGIN_PAGE_URL)
+		err := util.InitCookieJar(LOGIN_PAGE_URL)
 		if err != nil {
 			log.Fatal(err)
 		}
 		all_items := make([]*db.Item, 0, 4100)
 		all_item_urls := make([]string, 0, 4100)
-		html_str, err := util.GetPage(START_URL_MONTHLY, cookies)
+		html_str, err := util.GetPage(START_URL_MONTHLY)
 		if err != nil {
 			log.Println(err)
 		}
@@ -116,7 +119,7 @@ func Start() {
 		if err != nil {
 			log.Println(err)
 		}
-		htmls := util.DownLoadPages(urls, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
+		htmls := util.DownLoadPages(urls, REQUEST_INTERVAL, REQUEST_TIME_OUT)
 		for i := 0; i < len(htmls); i++ {
 			items, err := ParseListPageToItems(htmls[i])
 			if err != nil {
@@ -131,27 +134,38 @@ func Start() {
 			all_item_urls = append(all_item_urls, item_urls...)
 		}
 
-		err = db.SaveAll("chinabiddings", all_items)
-		if err != nil {
-			log.Println(err)
-		}
-
 		log.Println(len(htmls))
 		log.Println(len(all_items))
 		log.Println(len(all_item_urls))
 
-		// cookies, err = util.Login(LOGIN_CHECK_URL,
-		// 	map[string]string{"name": "nmzb", "password": "NMzb2014"}, cookies)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// htmls = util.DownLoadPages(all_item_urls, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
+		err = util.Login(LOGIN_CHECK_URL, map[string]string{"name": "nmzb", "password": "NMzb2014"})
+		if err != nil {
+			log.Println(err)
+		}
+
+		all_item_urls = all_item_urls[:200]
+		htmls = util.DownLoadPages(all_item_urls, 1*time.Second, REQUEST_TIME_OUT)
+
 		// log.Printf("%d", len(htmls))
 
-		// for i, h := range htmls {
-		// 	ParseDetailPage(all_items[i], h)
+		// errs := make([]error, 0, 1000)
+		// for i, h := range htmls[:500] {
+		// 	err = ParseDetailPage(all_items[i], h)
+		// 	if err != nil {
+		// 		log.Println(err)
+		// 		errs = append(errs, err)
+		// 	}
 		// }
 
+		// if len(errs) > 0 {
+		// 	log.Println(len(errs))
+		// 	return
+		// }
+
+		// err = db.SaveAll("chinabiddings", all_items[:500])
+		// if err != nil {
+		// 	log.Println(err)
+		// }
 		// for i, item := range all_items {
 		// 	fmt.Printf("%d %+v\n", i, item)
 		// }
@@ -161,4 +175,21 @@ func Start() {
 		// ParseDetailPage(item, body)
 		// fmt.Println(item.AgentName)
 	})
+}
+
+func GetPage302() {
+	err := util.InitCookieJar(LOGIN_PAGE_URL)
+	if err != nil {
+		log.Println(err)
+	}
+	err = util.Login(LOGIN_CHECK_URL, map[string]string{"name": "nmzb", "password": "NMzb2014"})
+	if err != nil {
+		log.Println(err)
+	}
+
+	html, err := util.GetPage("http://www.chinabidding.com.cn/zbgs/jLDA.html")
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(html)
 }
