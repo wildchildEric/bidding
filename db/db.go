@@ -2,24 +2,43 @@ package db
 
 import (
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
+	// "gopkg.in/mgo.v2/bson"
 )
 
-func Save() {
-	session, err := mgo.Dial("server1.example.com,server2.example.com")
+const (
+	DB_HOST string = "localhost"
+	DB_NAME string = "biddinginfo"
+)
+
+type Item struct {
+	Title     string
+	Category  string
+	Region    string
+	Industry  string
+	Date      string
+	AgentName string
+	UrlDetail string
+}
+
+func withCollection(collName string, f func(c *mgo.Collection) error) error {
+	session, err := mgo.Dial(DB_HOST)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer session.Close()
+	session.SetMode(mgo.Monotonic, true) // Optional. Switch the session to a monotonic behavior.
+	c := session.DB(DB_NAME).C(collName)
+	return f(c)
+}
 
-	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-
-	c := session.DB("test").C("people")
-	err = c.Insert(&Person{"Ale", "+55 53 8116 9639"},
-		&Person{"Cla", "+55 53 8402 8510"})
-
-	if err != nil {
-		log.Fatal(err)
-	}
+func SaveAll(collName string, docs []*Item) error {
+	return withCollection(collName, func(c *mgo.Collection) error {
+		for _, doc := range docs {
+			err := c.Insert(doc)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }

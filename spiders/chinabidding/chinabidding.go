@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"wildchild.me/biddinginfo/db"
 	"wildchild.me/biddinginfo/util"
 )
 
@@ -22,24 +23,14 @@ const (
 	REQUEST_TIME_OUT  = 3 * time.Second
 )
 
-type Item struct {
-	Title     string
-	Category  string
-	Region    string
-	Industry  string
-	Date      string
-	AgentName string
-	UrlDetail string
-}
-
-func ParseListPageToItems(html_string string) ([]*Item, error) {
+func ParseListPageToItems(html_string string) ([]*db.Item, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
 		return nil, err
 	}
-	var items []*Item
+	var items []*db.Item
 	parse_func := func(i int, s *goquery.Selection) {
-		item := &Item{}
+		item := &db.Item{}
 		s.Find("td").Each(func(i int, s *goquery.Selection) {
 			switch i {
 			case 1:
@@ -66,7 +57,7 @@ func ParseListPageToItems(html_string string) ([]*Item, error) {
 	return items, nil
 }
 
-func ParseDetailPage(item *Item, html_string string) error {
+func ParseDetailPage(item *db.Item, html_string string) error {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
 		return err
@@ -115,7 +106,7 @@ func Start() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		all_items := make([]*Item, 0, 4100)
+		all_items := make([]*db.Item, 0, 4100)
 		all_item_urls := make([]string, 0, 4100)
 		html_str, err := util.GetPage(START_URL_MONTHLY, cookies)
 		if err != nil {
@@ -140,14 +131,12 @@ func Start() {
 			all_item_urls = append(all_item_urls, item_urls...)
 		}
 
-		// for i, item := range all_items {
-		// 	fmt.Printf("%d %v\n", i, item)
-		// }
+		err = db.SaveAll("chinabiddings", all_items)
+		if err != nil {
+			log.Println(err)
+		}
 
-		// for i, u := range all_item_urls {
-		// 	fmt.Printf("%d %v\n", i, u)
-		// }
-
+		log.Println(len(htmls))
 		log.Println(len(all_items))
 		log.Println(len(all_item_urls))
 
