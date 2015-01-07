@@ -88,6 +88,7 @@ func GetPageAsync(urlStr string, cookies []*http.Cookie) (<-chan string, <-chan 
 func DownLoadPages(urls []string, cookies []*http.Cookie,
 	interval time.Duration, timeout time.Duration) []string {
 
+	log.Printf("Downloading %d urls", len(urls))
 	arr_chan := make([][2]<-chan string, 0, len(urls))
 	htmls := make([]string, 0, len(urls))
 	failed_urls := make([]string, 0, len(urls)/2+1)
@@ -107,7 +108,7 @@ func DownLoadPages(urls []string, cookies []*http.Cookie,
 			failed_urls = append(failed_urls, u)
 		case <-time.After(timeout):
 			failed_urls = append(failed_urls, urls[i])
-			log.Printf("%d item timed out %d", i, urls[i])
+			log.Printf("%d item timed out: %s", i, urls[i])
 		}
 	}
 	if len(failed_urls) > 0 {
