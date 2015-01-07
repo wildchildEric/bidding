@@ -18,9 +18,9 @@ func GetCookies(url string) ([]*http.Cookie, error) {
 	return resp.Cookies(), nil
 }
 
-func GetPage(urlStr string, cookies []*http.Cookie) (string, error) {
+func GetPage(url string, cookies []*http.Cookie) (string, error) {
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", urlStr, nil)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return "", err
 	}
@@ -32,7 +32,7 @@ func GetPage(urlStr string, cookies []*http.Cookie) (string, error) {
 		return "", err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return "", errors.New(fmt.Sprintf("Response with incorrect status code: %d", resp.StatusCode))
+		return "", errors.New(fmt.Sprintf("Response for %s with incorrect status code: %d", url, resp.StatusCode))
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -86,44 +86,38 @@ func GetPageAsync(urlStr string, cookies []*http.Cookie) (<-chan string, <-chan 
 }
 
 func DownLoadPages(urls []string, cookies []*http.Cookie,
-	interval time.Duration, requestTimeout time.Duration) []string {
+	interval time.Duration, timeout time.Duration) []string {
 
-	ch := make(chan string)
-	ch_f := make(chan string)
-	arr_html := make([]string, 0, len(urls))
-	failed_urls := make([]string, 0, len(urls)/2)
+	arr_chan := make([][2]<-chan string, 0, len(urls))
+	htmls := make([]string, 0, len(urls))
+	failed_urls := make([]string, 0, len(urls)/2+1)
+
 	for _, u := range urls {
 		time.Sleep(interval)
-		go func() {
-			html_str, err := GetPage(u, cookies)
-			if err != nil {
-				log.Println(err)
-				ch_f <- u
-				return
-			}
-			ch <- html_str
-		}()
+		ch0, ch1 := GetPageAsync(u, cookies)
+		arr_chan = append(arr_chan, [2]<-chan string{ch0, ch1})
 	}
-	for i := 0; i < len(urls); i++ {
-		timeout := time.After(requestTimeout)
+	for i, chan_arr := range arr_chan {
+		ch0 := chan_arr[0]
+		ch1 := chan_arr[1]
 		select {
-		case html_str := <-ch:
-			arr_html = append(arr_html, html_str)
-		case url := <-ch_f:
-			failed_urls = append(failed_urls, url)
-		case <-timeout:
-			log.Printf("%d item timed out", i)
+		case h := <-ch0:
+			htmls = append(htmls, h)
+		case u := <-ch1:
+			failed_urls = append(failed_urls, u)
+		case <-time.After(timeout):
 			failed_urls = append(failed_urls, urls[i])
+			log.Printf("%d item timed out %d", i, urls[i])
 		}
 	}
 	if len(failed_urls) > 0 {
 		arr := DownLoadPages(failed_urls,
 			cookies,
 			interval+10*time.Millisecond,
-			requestTimeout+1*time.Second)
-		arr_html = append(arr_html, arr...)
+			timeout+1*time.Second)
+		htmls = append(htmls, arr...)
 	}
-	return arr_html
+	return htmls
 }
 
 func LogInvokeTime(f func()) {

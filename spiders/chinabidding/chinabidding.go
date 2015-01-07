@@ -18,8 +18,8 @@ const (
 	START_URL_YEARLY  = ROOT_URL + "/search/searchzbw/search2?keywords=&areaid=7&categoryid=&b_date=year"
 	LOGIN_PAGE_URL    = ROOT_URL + "/cblcn/member.login/login"
 	LOGIN_CHECK_URL   = ROOT_URL + "/cblcn/member.login/logincheck"
-	REQUEST_INTERVAL  = 90 * time.Millisecond
-	REQUEST_TIME_OUT  = 2 * time.Second
+	REQUEST_INTERVAL  = 10 * time.Millisecond
+	REQUEST_TIME_OUT  = 3 * time.Second
 )
 
 type Item struct {
@@ -151,13 +151,13 @@ func Start() {
 		log.Println(len(all_items))
 		log.Println(len(all_item_urls))
 
-		cookies, err = util.Login(LOGIN_CHECK_URL,
-			map[string]string{"name": "nmzb", "password": "NMzb2014"}, cookies)
-		if err != nil {
-			log.Fatal(err)
-		}
-		htmls = util.DownLoadPages(all_item_urls, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
-		log.Printf("%d", len(htmls))
+		// cookies, err = util.Login(LOGIN_CHECK_URL,
+		// 	map[string]string{"name": "nmzb", "password": "NMzb2014"}, cookies)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		// htmls = util.DownLoadPages(all_item_urls, cookies, REQUEST_INTERVAL, REQUEST_TIME_OUT)
+		// log.Printf("%d", len(htmls))
 
 		// for i, h := range htmls {
 		// 	ParseDetailPage(all_items[i], h)
