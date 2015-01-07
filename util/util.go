@@ -8,15 +8,14 @@ import (
 	"log"
 	"net/http"
 	"net/http/cookiejar"
-	// "net/url"
-	// "runtime"
 	"strings"
 	"time"
 )
 
-const (
-	MAX_GORUTINE_NUM int = 1000
-)
+type Page struct {
+	Url     string
+	Content string
+}
 
 var (
 	jar *cookiejar.Jar
@@ -34,7 +33,7 @@ func InitCookieJar(url string) error {
 	client := &http.Client{
 		Jar: jar,
 	}
-	_, err = client.Get(url)
+	_, err = client.Head(url)
 	return err
 }
 func Login(url string, loginMap map[string]string) error {
@@ -63,79 +62,72 @@ func Login(url string, loginMap map[string]string) error {
 	return nil
 }
 
-func GetPage(urlStr string) (string, error) {
-	// u, err := url.Parse(urlStr)
-	// if err != nil {
-	// 	return "", err
-	// }
-	// jar.SetCookies(u, cookies)
+func GetPage(urlStr string) (*Page, error) {
 	client := http.Client{
 		Jar: jar,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			// log.Printf("redirect %s to %s", urlStr, req.URL)
-			// if len(via) >= 100 {
-			return errors.New("stopped after 100 redirects ")
-			// }
-			// return nil
+			if len(via) >= 10 {
+				return errors.New("stopped after 10 redirects ")
+			}
+			return nil
 		},
 	}
-	req, err := http.NewRequest("GET", urlStr, nil)
+
+	resp, err := client.Get(urlStr)
 	if err != nil {
-		return "", err
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return "", errors.New(fmt.Sprintf("Response for %s with incorrect status code: %d", urlStr, resp.StatusCode))
+		return nil, errors.New(fmt.Sprintf("Response for %s with incorrect status code: %d", urlStr, resp.StatusCode))
 	}
-	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+	resp.Body.Close() //instead of useing defer because: http://stackoverflow.com/questions/12952833/lookup-host-no-such-host-error-in-go
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(body), nil
+	return &Page{urlStr, string(body)}, nil
 }
 
-func GetPageAsync(urlStr string) (<-chan string, <-chan string) {
-	ch_content := make(chan string)
+type ChanPair struct {
+	ch0 <-chan *Page
+	ch1 <-chan string
+}
+
+func GetPageAsync(urlStr string) ChanPair {
+	ch_content := make(chan *Page)
 	ch_failed_url := make(chan string)
 	go func() {
-		html_str, err := GetPage(urlStr)
+		page, err := GetPage(urlStr)
 		if err != nil {
 			log.Println(err)
 			ch_failed_url <- urlStr
 			return
 		}
-		ch_content <- html_str
+		ch_content <- page
 	}()
-	return ch_content, ch_failed_url
+	return ChanPair{ch_content, ch_failed_url}
 }
 
-func DownLoadPages(urls []string, interval time.Duration, timeout time.Duration) []string {
+func DownLoadPages(urls []string, interval time.Duration, timeout time.Duration, beforeGetPage func(int)) []*Page {
 
 	log.Printf("Downloading %d urls", len(urls))
-	arr_chan := make([][2]<-chan string, 0, len(urls))
-	htmls := make([]string, 0, len(urls))
-	failed_urls := make([]string, 0, MAX_GORUTINE_NUM)
+	arr_chan := make([]ChanPair, 0, len(urls))
+	pages := make([]*Page, 0, len(urls))
+	failed_urls := make([]string, 0, len(urls)/2+1)
 
 	for i, u := range urls {
-		if i <= MAX_GORUTINE_NUM {
-			time.Sleep(interval)
-			ch0, ch1 := GetPageAsync(u)
-			arr_chan = append(arr_chan, [2]<-chan string{ch0, ch1})
-		} else {
-			failed_urls = append(failed_urls, urls[i])
+		time.Sleep(interval)
+		if beforeGetPage != nil {
+			beforeGetPage(i)
 		}
+		chPair := GetPageAsync(u)
+		arr_chan = append(arr_chan, chPair)
 	}
-	for i, chan_arr := range arr_chan {
-		ch0 := chan_arr[0]
-		ch1 := chan_arr[1]
+	for i, chan_pair := range arr_chan {
 		select {
-		case h := <-ch0:
-			htmls = append(htmls, h)
-		case u := <-ch1:
+		case p := <-chan_pair.ch0:
+			pages = append(pages, p)
+		case u := <-chan_pair.ch1:
 			failed_urls = append(failed_urls, u)
 		case <-time.After(timeout):
 			failed_urls = append(failed_urls, urls[i])
@@ -145,10 +137,11 @@ func DownLoadPages(urls []string, interval time.Duration, timeout time.Duration)
 	if len(failed_urls) > 0 {
 		arr := DownLoadPages(failed_urls,
 			interval+10*time.Millisecond,
-			timeout+1*time.Second)
-		htmls = append(htmls, arr...)
+			timeout+1*time.Second,
+			beforeGetPage)
+		pages = append(pages, arr...)
 	}
-	return htmls
+	return pages
 }
 
 func LogInvokeTime(f func()) {
