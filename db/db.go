@@ -20,6 +20,10 @@ type Item struct {
 	UrlDetail string
 }
 
+func (p *Item) CollectionName() string {
+	return "chinabiddings"
+}
+
 func withCollection(collName string, f func(c *mgo.Collection) error) error {
 	session, err := mgo.Dial(DB_HOST)
 	if err != nil {
@@ -31,8 +35,8 @@ func withCollection(collName string, f func(c *mgo.Collection) error) error {
 	return f(c)
 }
 
-func SaveAll(collName string, docs []*Item) error {
-	return withCollection(collName, func(c *mgo.Collection) error {
+func SaveAll(docs []*Item) error {
+	return withCollection(new(Item).CollectionName(), func(c *mgo.Collection) error {
 		for _, doc := range docs {
 			err := c.Insert(doc)
 			if err != nil {
@@ -43,10 +47,10 @@ func SaveAll(collName string, docs []*Item) error {
 	})
 }
 
-func GetAll(collName string, page int) ([]*Item, error) {
-	perPage := 20
+func GetAll(page int) ([]*Item, error) {
+	perPage := 100
 	var items []*Item
-	err := withCollection(collName, func(c *mgo.Collection) error {
+	err := withCollection(new(Item).CollectionName(), func(c *mgo.Collection) error {
 		return c.Find(nil).Skip(page * perPage).Limit(perPage).All(&items)
 	})
 	return items, err

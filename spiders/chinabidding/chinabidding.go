@@ -160,7 +160,7 @@ func Start() {
 			ParseDetailPage(it, page.Content)
 		}
 		log.Printf("%d", len(pages))
-		err = db.SaveAll("chinabiddings", all_items)
+		err = db.SaveAll(all_items)
 		if err != nil {
 			log.Println(err)
 		}

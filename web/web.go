@@ -61,12 +61,13 @@ func render(w http.ResponseWriter, tmplName string, data interface{}) {
 }
 
 func handlerICon(w http.ResponseWriter, r *http.Request) {}
+
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
 		log.Println(err)
 	}
-	items, err := db.GetAll("chinabiddings", page)
+	items, err := db.GetAll(page)
 	if err != nil {
 		log.Println(err)
 	}
