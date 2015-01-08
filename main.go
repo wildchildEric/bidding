@@ -1,9 +1,11 @@
 package main
 
 import (
-	"wildchild.me/biddinginfo/spiders/chinabidding"
+	"wildchild.me/biddinginfo/web"
+	// "wildchild.me/biddinginfo/spiders/chinabidding"
 )
 
 func main() {
-	chinabidding.Start()
+	// chinabidding.Start()
+	web.Start()
 }
