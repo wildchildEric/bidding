@@ -42,3 +42,12 @@ func SaveAll(collName string, docs []*Item) error {
 		return nil
 	})
 }
+
+func GetAll(collName string, page int) ([]*Item, error) {
+	perPage := 20
+	var items []*Item
+	err := withCollection(collName, func(c *mgo.Collection) error {
+		return c.Find(nil).Skip(page * perPage).Limit(perPage).All(&items)
+	})
+	return items, err
+}

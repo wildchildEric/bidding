@@ -6,7 +6,9 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"wildchild.me/biddinginfo/db"
 )
 
 var (
@@ -26,7 +28,6 @@ func init() {
 	if templatesMap == nil {
 		templatesMap = make(map[string]*template.Template)
 	}
-
 	layouts, err := filepath.Glob(templatesDir + "layouts/*.html")
 	if err != nil {
 		log.Panic(err)
@@ -35,7 +36,6 @@ func init() {
 	if err != nil {
 		log.Panic(err)
 	}
-
 	for _, vl := range layouts {
 		for _, vv := range views {
 			lName := getPathName(vl)
@@ -47,27 +47,37 @@ func init() {
 	}
 }
 
-func render(w http.ResponseWriter, tmplName string) {
+func render(w http.ResponseWriter, tmplName string, data interface{}) {
 	lName := "base"
 	key := fmt.Sprintf("%s_%s", lName, tmplName)
 	t, ok := templatesMap[key]
 	if !ok {
 		http.Error(w, "No such template.", http.StatusInternalServerError)
 	}
-	err := t.ExecuteTemplate(w, "base", nil)
+	err := t.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
+func handlerICon(w http.ResponseWriter, r *http.Request) {}
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	render(w, "root")
+	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		log.Println(err)
+	}
+	items, err := db.GetAll("chinabiddings", page)
+	if err != nil {
+		log.Println(err)
+	}
+	render(w, "root", items)
 }
 
 func Start() {
 	fs := http.FileServer(http.Dir("web/static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("/", rootHandler)
+	http.HandleFunc("/favicon.ico", handlerICon)
 	log.Println("Listening...")
 	http.ListenAndServe(":8080", nil)
 }

@@ -1,3 +1,31 @@
 {{ define "content" }}
-hello world
+	<h2 class="sub-header">数据</h2>
+	<div class="table-responsive">
+        <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>标题</th>
+                  <th>类别</th>
+                  <th>地区</th>
+                  <th>行业</th>
+                  <th>日期</th>
+                 <th>招标代理</th>
+                 <th>链接</th>
+                </tr>
+              </thead>
+              <tbody>
+					{{range .}}
+						<tr>
+					        <td> {{.Title}}</td>
+					        <td> {{.Category}}</td>
+					        <td> {{.Region}}</td>
+					        <td> {{.Industry}}</td>
+					        <td> {{.Date}}</td>
+					        <td> {{.AgentName}}</td>
+					        <td> {{.UrlDetail}}</td>
+				        </tr>
+			    	{{end}}
+                </tbody>
+        </table>
+	</div>
 {{ end }}
