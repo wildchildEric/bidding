@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"wildchild.me/biddinginfo/db"
 )
 
@@ -17,6 +18,7 @@ const (
 
 var (
 	templatesMap map[string]*template.Template
+	lk           sync.Mutex
 )
 
 func getPathName(path string) string {
@@ -52,7 +54,9 @@ func init() {
 func render(w http.ResponseWriter, tmplName string, data interface{}) {
 	lName := "application"
 	key := fmt.Sprintf("%s_%s", lName, tmplName)
+	lk.Lock()
 	t, ok := templatesMap[key]
+	lk.Unlock()
 	if !ok {
 		http.Error(w, "No such template.", http.StatusInternalServerError)
 		return
