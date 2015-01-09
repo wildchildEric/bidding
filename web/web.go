@@ -98,7 +98,7 @@ func bulkActionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	action := r.FormValue("bulk_action")
-	ids := r.Form["model_ids[]"]
+	ids := r.Form["model_ids"]
 
 	switch action {
 	case "bulk_export_select_selected":
