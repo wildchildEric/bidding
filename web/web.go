@@ -14,7 +14,6 @@ import (
 var (
 	templatesDir = "web/template/"
 	templatesMap map[string]*template.Template
-	templates    = template.Must(template.ParseGlob("web/template/*.html"))
 )
 
 func getPathName(path string) string {
