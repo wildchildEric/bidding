@@ -41,20 +41,20 @@ func init() {
 			lName := getPathName(vl)
 			vName := getPathName(vv)
 			key := fmt.Sprintf("%s_%s", lName, vName)
-			t := template.Must(template.New("").ParseFiles(vl, vv))
+			t := template.Must(template.New(key).ParseFiles(vl, vv))
 			templatesMap[key] = t
 		}
 	}
 }
 
 func render(w http.ResponseWriter, tmplName string, data interface{}) {
-	lName := "base"
+	lName := "application"
 	key := fmt.Sprintf("%s_%s", lName, tmplName)
 	t, ok := templatesMap[key]
 	if !ok {
 		http.Error(w, "No such template.", http.StatusInternalServerError)
 	}
-	err := t.ExecuteTemplate(w, "base", data)
+	err := t.ExecuteTemplate(w, lName, data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -71,7 +71,9 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	render(w, "root", items)
+	data := map[string]interface{}{"items": items, "count": len(items)}
+
+	render(w, "root", data)
 }
 
 func Start() {

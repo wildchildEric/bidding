@@ -1,6 +1,10 @@
-{{ define "content" }}
-	<h2 class="sub-header">数据</h2>
+{{define "title"}}
+	中国采购与招标网
+{{end}}
+
+{{ define "content" }}	
 	<div class="table-responsive">
+	<h1>{{.count}}</h1>
         <table class="table table-striped">
               <thead>
                 <tr>
@@ -14,7 +18,7 @@
                 </tr>
               </thead>
               <tbody>
-					{{range .}}
+					{{range .items}}
 						<tr>
 					        <td> {{.Title}}</td>
 					        <td> {{.Category}}</td>
