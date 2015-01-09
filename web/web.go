@@ -11,8 +11,11 @@ import (
 	"wildchild.me/biddinginfo/db"
 )
 
-var (
+const (
 	templatesDir = "web/template/"
+)
+
+var (
 	templatesMap map[string]*template.Template
 )
 
@@ -64,15 +67,15 @@ func render(w http.ResponseWriter, tmplName string, data interface{}) {
 func handlerICon(w http.ResponseWriter, r *http.Request) {}
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	page, err := strconv.Atoi(r.URL.Query().Get("page"))
+	pn, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
 		log.Println(err)
 	}
-	items, err := db.GetAll(page)
+	page, err := db.GetPage(pn, 100)
 	if err != nil {
 		log.Println(err)
 	}
-	data := map[string]interface{}{"items": items, "count": len(items)}
+	data := map[string]interface{}{"page": page}
 
 	render(w, "root", data)
 }

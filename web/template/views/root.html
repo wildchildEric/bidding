@@ -4,7 +4,7 @@
 
 {{ define "content" }}	
 	<div class="table-responsive">
-	<h1>{{.count}}</h1>
+	<p>共{{.page.TotalCount}}条数据 当前第{{.page.PageNum}}页 每页{{.page.CountPerPage}}条</p>
         <table class="table table-striped">
               <thead>
                 <tr>
@@ -18,7 +18,7 @@
                 </tr>
               </thead>
               <tbody>
-					{{range .items}}
+					{{range .page.Items}}
 						<tr>
 					        <td> {{.Title}}</td>
 					        <td> {{.Category}}</td>
