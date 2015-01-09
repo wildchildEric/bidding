@@ -3,11 +3,14 @@
 {{end}}
 
 {{ define "content" }}	
-{{template "paginate" .}}
+	{{template "paginate" .}}
 	<div class="table-responsive">		
         <table class="table table-striped">
               <thead>
                 <tr>
+                  <th>
+                  	<input id="ck_box_toggle_all" name="ck_box_toggle_all" type="checkbox" value="1">
+                  </th>
                   <th>标题</th>
                   <th>类别</th>
                   <th>地区</th>
@@ -19,6 +22,7 @@
               <tbody>
 					{{range .page.Items}}
 						<tr>
+							<td><input class="bulk_edit_ck_box" id="model_ids_" name="model_ids[]" type="checkbox" value="{{.ID.Hex}}"></td>
 					        <td> <a href="{{.UrlDetail}}" target="_blank">{{.Title}}</a></td>
 					        <td> {{.Category}}</td>
 					        <td> {{.Region}}</td>

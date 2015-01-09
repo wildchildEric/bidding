@@ -2,7 +2,7 @@ package db
 
 import (
 	"gopkg.in/mgo.v2"
-	// "gopkg.in/mgo.v2/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -11,6 +11,7 @@ const (
 )
 
 type Item struct {
+	ID        bson.ObjectId `bson:"_id,omitempty"`
 	Title     string
 	Category  string
 	Region    string

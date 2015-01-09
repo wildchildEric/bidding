@@ -166,7 +166,7 @@ func Start() {
 		}
 		num := 0
 		for i, item := range all_items {
-			log.Printf("%d %+v\n", i, item)
+			// log.Printf("%d %+v\n", i, item)
 			if item.AgentName == "" {
 				num++
 			}

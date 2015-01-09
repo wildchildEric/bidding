@@ -19,7 +19,7 @@ func Paginate(page db.Page) template.HTML {
 	} else {
 		totalPage = page.TotalCount/page.CountPerPage + 1
 	}
-	pageInfo := fmt.Sprintf("共%d条 每页%d条  当前第%d页 共%d页", page.TotalCount, page.CountPerPage, page.CurrentPage, totalPage)
+	pageInfo := fmt.Sprintf("<h5>共%d条 每页%d条  当前第%d页 共%d页</h5>", page.TotalCount, page.CountPerPage, page.CurrentPage, totalPage)
 
 	pageHead := fmt.Sprintf(`<li><a href="?page=%d" aria-label="Previous"><span aria-hidden="true">« 首页</span></a></li>`, 1)
 	pagePre := fmt.Sprintf(`<li><a href="?page=%d" aria-label="Previous"><span aria-hidden="true">‹ 上一页</span></a></li>`, page.CurrentPage-1)
