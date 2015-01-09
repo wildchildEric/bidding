@@ -1,6 +1,8 @@
 package web
 
 import (
+	"bytes"
+	"encoding/csv"
 	"fmt"
 	"html/template"
 	"log"
@@ -41,11 +43,9 @@ func init() {
 	if err != nil {
 		log.Panic(err)
 	}
-
 	templateFuncs := template.FuncMap{
 		"paginate": helper.Paginate,
 	}
-
 	for _, vl := range layouts {
 		for _, vv := range views {
 			lName := getPathName(vl)
@@ -92,7 +92,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func bulkActionHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO: get 'bulk_action', model_ids[] param then send csv file back to browser
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -100,9 +99,45 @@ func bulkActionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	action := r.FormValue("bulk_action")
 	ids := r.Form["model_ids[]"]
-	log.Println(action)
-	log.Println(ids)
-	http.Redirect(w, r, "/", http.StatusFound)
+
+	switch action {
+	case "bulk_export_select_selected":
+		items, err := db.GetItems(ids)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		records := convertCsvArray(items)
+		b := &bytes.Buffer{}
+		wr := csv.NewWriter(b)
+		wr.WriteAll(records)
+		wr.Flush()
+		w.Header().Set("Content-Type", "text/csv")
+		w.Header().Set("Content-Disposition", "attachment;filename=招标数据.csv")
+		w.Write(b.Bytes())
+		// for _, it := range items {
+		// 	log.Printf("%+v", it)
+		// }
+	case "bulk_export_excluding_selected":
+		fmt.Fprintf(w, "not implemented yet.")
+	}
+}
+
+func convertCsvArray(items []*db.Item) [][]string {
+	records := make([][]string, 0, len(items))
+	records = append(records, []string{"标题", "类别", "地区", "行业", "日期", "招标代理", "链接"})
+	for _, it := range items {
+		r := make([]string, 0, 7)
+		r = append(r, it.Title)
+		r = append(r, it.Category)
+		r = append(r, it.Region)
+		r = append(r, it.Industry)
+		r = append(r, it.Date)
+		r = append(r, it.AgentName)
+		r = append(r, it.UrlDetail)
+		records = append(records, r)
+	}
+	return records
 }
 
 func Start() {

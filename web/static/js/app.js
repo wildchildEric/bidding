@@ -4,12 +4,12 @@ $(document).ready(function () {
             var $this = $(this);
             $('.bulk_edit_ck_box').prop('checked', $this.is(':checked'));
 	});
-	$('#bulk_export_link0').click(function(e){		
-		send_bulk_action('export0','确定导出？')
+	$('#bulk_export_select_selected').click(function(e){		
+		send_bulk_action('bulk_export_select_selected','确定导出？')
 		return false;
 	});
-	$('#bulk_export_link1').click(function(e){		
-		send_bulk_action('export1','确定导出？')
+	$('#bulk_export_excluding_selected').click(function(e){		
+		send_bulk_action('bulk_export_excluding_selected','确定导出？')
 		return false;
 	});
 
