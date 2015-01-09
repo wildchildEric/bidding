@@ -4,9 +4,9 @@
 
 {{ define "content" }}	
 
-	<ul class="nav nav-tabs">
+	<!-- <ul class="nav nav-tabs">
       <li role="presentation" class="active"><a href="#">数据</a></li>      
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="dropdown" style="float:right">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
           导出 <span class="caret"></span>
         </a>
@@ -16,7 +16,35 @@
           <li><a href="#">Separated link</a></li>
         </ul>
       </li>
-    </ul>
+    </ul> -->
+
+
+
+	<ul class="nav nav-tabs">
+	  <li title="" rel="" class="active">
+	    <a href="/customers">
+	        <i class="fa fa-list"></i>
+	        	<span>全部数据</span>
+		</a>  
+	  </li>  
+		<form accept-charset="UTF-8" action="/customers/bulk_action" id="bulk_form" method="post"><div style="display:none"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="K13do5Htx/yhSnv7wyweWmVTsh5vxIQm9vLTF0aKLdI="></div>
+	    	<input id="bulk_action" name="bulk_action" type="hidden">
+	    	<div id="bulk_hide_div" style="display: none;"></div>
+		</form>
+		<li class="dropdown" style="float:right">
+	  		<a class="dropdown-toggle" data-toggle="dropdown" href="#">导出<b class="caret"></b></a>
+	  		<ul class="dropdown-menu" style="left:auto; right:0;">
+		    	<li>
+		      		<a id="bulk_export_link" href="#">选中导出CSV</a>
+		    	</li>
+		    	<li>
+		      		<a id="bulk_delete_link" href="#">排除选中导出CSV</a>
+		    	</li>
+	  		</ul>
+		</li>
+	</ul>
+
+
 
 	<br>
 	{{template "paginate" .}}
