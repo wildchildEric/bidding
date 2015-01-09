@@ -76,7 +76,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	data := map[string]interface{}{"page": page}
-
 	render(w, "root", data)
 }
 

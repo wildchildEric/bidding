@@ -13,20 +13,18 @@
                   <th>地区</th>
                   <th>行业</th>
                   <th>日期</th>
-                 <th>招标代理</th>
-                 <th>链接</th>
+                 <th>招标代理</th>                 
                 </tr>
               </thead>
               <tbody>
 					{{range .page.Items}}
 						<tr>
-					        <td> {{.Title}}</td>
+					        <td> <a href="{{.UrlDetail}}" target="_blank">{{.Title}}</a></td>
 					        <td> {{.Category}}</td>
 					        <td> {{.Region}}</td>
 					        <td> {{.Industry}}</td>
 					        <td> {{.Date}}</td>
-					        <td> {{.AgentName}}</td>
-					        <td> {{.UrlDetail}}</td>
+					        <td> {{.AgentName}}</td>					        
 				        </tr>
 			    	{{end}}
                 </tbody>
