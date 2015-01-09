@@ -52,10 +52,12 @@ func render(w http.ResponseWriter, tmplName string, data interface{}) {
 	t, ok := templatesMap[key]
 	if !ok {
 		http.Error(w, "No such template.", http.StatusInternalServerError)
+		return
 	}
 	err := t.ExecuteTemplate(w, lName, data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 }
 
