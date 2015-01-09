@@ -45,13 +45,13 @@ func Paginate(page db.Page) template.HTML {
 
 	var pageLinks string
 	linkNum := 5
-	plinkActive := `<li class="active"><a href="?page=%d">%d</a></li>`
+	plinkActive := `<li class="active"><a>%d</a></li>`
 	plink := `<li ><a href="?page=%d">%d</a></li>`
 	plinkDisable := `<li class="disabled"><a href="#">…</a></li>`
 
 	f := func(p db.Page, i int) string {
 		if i == page.CurrentPage {
-			return fmt.Sprintf(plinkActive, i, i)
+			return fmt.Sprintf(plinkActive, i)
 		} else {
 			return fmt.Sprintf(plink, i, i)
 		}
