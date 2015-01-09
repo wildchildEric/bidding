@@ -83,7 +83,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	page, err := db.GetPage(pn, 5000)
+	page, err := db.GetPage(pn, 200)
 	if err != nil {
 		log.Println(err)
 	}
