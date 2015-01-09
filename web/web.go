@@ -81,7 +81,7 @@ func handlerICon(w http.ResponseWriter, r *http.Request) {}
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	pn, err := strconv.Atoi(r.URL.Query().Get("page"))
 	if err != nil {
-		log.Println(err)
+		pn = 0
 	}
 	page, err := db.GetPage(pn, 200)
 	if err != nil {
@@ -91,10 +91,25 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	render(w, "root", data)
 }
 
+func bulkActionHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO: get 'bulk_action', model_ids[] param then send csv file back to browser
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	action := r.FormValue("bulk_action")
+	ids := r.Form["model_ids[]"]
+	log.Println(action)
+	log.Println(ids)
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
 func Start() {
 	fs := http.FileServer(http.Dir("web/static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("/", rootHandler)
+	http.HandleFunc("/bulk_action", bulkActionHandler)
 	http.HandleFunc("/favicon.ico", handlerICon)
 	log.Println("Listening...")
 	http.ListenAndServe(":8080", nil)
