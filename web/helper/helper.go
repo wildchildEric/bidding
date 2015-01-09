@@ -7,10 +7,14 @@ import (
 )
 
 func Paginate(page db.Page) template.HTML {
-	str := `<div class="row well">
-				<div class="col-sm-12 col-md-4" style="text-align: left;font-size: 14px;">%s</div>
-				<div class="col-sm-12 col-md-8" style="text-align: right;">
-				<ul class="pagination pagination-sm">%s</ul>
+	str := `<div class="well">
+				<div class="row">
+					<div class="col-sm-12 col-md-4" style="text-align: left;font-size: 14px;">
+						%s
+					</div>
+					<div class="col-sm-12 col-md-8" style="text-align: right;">
+						<ul class="pagination pagination-sm">%s</ul>
+					</div>
 				</div>
 			</div>`
 	var totalPage int
