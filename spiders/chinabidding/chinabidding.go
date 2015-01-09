@@ -23,7 +23,7 @@ const (
 	REQUEST_TIME_OUT  = 3 * time.Second
 )
 
-func ParseListPageToItems(html_string string) ([]*db.Item, error) {
+func ParseListPage(html_string string) ([]*db.Item, error) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html_string))
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func Start() {
 		pages := util.DownLoadPages(urls, REQUEST_INTERVAL, REQUEST_TIME_OUT, nil)
 
 		for _, p := range pages {
-			items, err := ParseListPageToItems(p.Content)
+			items, err := ParseListPage(p.Content)
 			if err != nil {
 				log.Println(err)
 				continue

@@ -48,22 +48,28 @@ func SaveAll(docs []*Item) error {
 }
 
 type Page struct {
-	PageNum      int
+	CurrentPage  int
 	CountPerPage int
 	TotalCount   int
 	Items        interface{}
 }
 
+//pageNum is form 1
 func GetPage(pageNum, countPerPage int) (Page, error) {
+	if pageNum <= 0 {
+		pageNum = 0
+	} else {
+		pageNum -= 1
+	}
 	var items []*Item
 	var total int
 	err := withCollection(new(Item).CollectionName(), func(c *mgo.Collection) error {
 		var err error
-		total, err = c.Find(nil).Count()
+		total, err = c.Count()
 		if err != nil {
 			return err
 		}
 		return c.Find(nil).Skip(pageNum * countPerPage).Limit(countPerPage).All(&items)
 	})
-	return Page{PageNum: pageNum, CountPerPage: countPerPage, TotalCount: total, Items: items}, err
+	return Page{CurrentPage: pageNum + 1, CountPerPage: countPerPage, TotalCount: total, Items: items}, err
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"wildchild.me/biddinginfo/web"
 	// "wildchild.me/biddinginfo/spiders/chinabidding"
+	"wildchild.me/biddinginfo/web"
 )
 
 func main() {
