@@ -115,9 +115,6 @@ func bulkActionHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/csv")
 		w.Header().Set("Content-Disposition", "attachment;filename=招标数据.csv")
 		w.Write(b.Bytes())
-		// for _, it := range items {
-		// 	log.Printf("%+v", it)
-		// }
 	case "bulk_export_excluding_selected":
 		fmt.Fprintf(w, "not implemented yet.")
 	}
