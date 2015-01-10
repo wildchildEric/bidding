@@ -76,6 +76,23 @@ func render(w http.ResponseWriter, tmplName string, data interface{}) {
 	}
 }
 
+func convertCsvArray(items []*db.Item) [][]string {
+	records := make([][]string, 0, len(items))
+	records = append(records, []string{"标题", "类别", "地区", "行业", "日期", "招标代理", "链接"})
+	for _, it := range items {
+		r := make([]string, 0, 7)
+		r = append(r, it.Title)
+		r = append(r, it.Category)
+		r = append(r, it.Region)
+		r = append(r, it.Industry)
+		r = append(r, it.Date)
+		r = append(r, it.AgentName)
+		r = append(r, it.UrlDetail)
+		records = append(records, r)
+	}
+	return records
+}
+
 func handlerICon(w http.ResponseWriter, r *http.Request) {}
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -118,23 +135,6 @@ func bulkActionHandler(w http.ResponseWriter, r *http.Request) {
 	case "bulk_export_excluding_selected":
 		fmt.Fprintf(w, "not implemented yet.")
 	}
-}
-
-func convertCsvArray(items []*db.Item) [][]string {
-	records := make([][]string, 0, len(items))
-	records = append(records, []string{"标题", "类别", "地区", "行业", "日期", "招标代理", "链接"})
-	for _, it := range items {
-		r := make([]string, 0, 7)
-		r = append(r, it.Title)
-		r = append(r, it.Category)
-		r = append(r, it.Region)
-		r = append(r, it.Industry)
-		r = append(r, it.Date)
-		r = append(r, it.AgentName)
-		r = append(r, it.UrlDetail)
-		records = append(records, r)
-	}
-	return records
 }
 
 func Start() {
